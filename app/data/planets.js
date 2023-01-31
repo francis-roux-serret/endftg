@@ -509,6 +509,42 @@ export default [
     exits: [0, 1, 1, 0, 0, 0],
   },
 
+  // WORMHOLES
+
+  {
+    id: '281',
+    ring: 2,
+    group: 'wormhole',
+    vp: 2,
+    label: 'Delta Corvi',
+    tags: ['gift', 'wormhole'],
+    background: 'home',
+    planets: ['G', 'S'],
+    exits: [1, 0, 1, 1, 0, 1],
+  },
+  {
+    id: '381',
+    ring: 3,
+    group: 'wormhole',
+    vp: 1,
+    label: 'Beta Sextantis',
+    tags: ['gift', 'wormhole'],
+    background: 'home',
+    planets: ['M', 'G'],
+    exits: [1, 0, 0, 1, 1, 0],
+  },
+  {
+    id: '382',
+    ring: 3,
+    group: 'wormhole',
+    vp: 1,
+    label: 'Zeta Chamaeleontis',
+    tags: ['gift', 'wormhole'],
+    background: 'home',
+    planets: ['M', 'S'],
+    exits: [1, 0, 1, 1, 0, 0],
+  },
+
   // HOME WORLDS
 
   {
