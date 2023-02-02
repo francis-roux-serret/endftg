@@ -1,11 +1,11 @@
-const P1 = { x: 0, y: -2 };
-const P2 = { x: -1, y: -1 };
-const P3 = { x: -1, y: 1 };
-const P4 = { x: 0, y: 2 };
-const P5 = { x: 1, y: 1 };
-const P6 = { x: 1, y: -1 };
+const P1 = { x: 0, y: -4 };
+const P2 = { x: -2, y: -2 };
+const P3 = { x: -2, y: 2 };
+const P4 = { x: 0, y: 4 };
+const P5 = { x: 2, y: 2 };
+const P6 = { x: 2, y: -2 };
 
-export default {
+const reference = {
   playerCountConfig: {
     2: {
       nbTechnos: 12,
@@ -44,3 +44,5 @@ export default {
     },
   },
 };
+
+export default reference;

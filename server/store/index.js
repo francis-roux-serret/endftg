@@ -16,7 +16,7 @@ const store = {
     newGame: data => {
       let gameId;
       do {
-        gameId = `${ Date.now() }-${ Math.floor(Math.random() * 9000 + 1000) }`;
+        gameId = `${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
       } while (store.loadGame(gameId));
       const gameData = {
         ...data,
