@@ -4,10 +4,11 @@
  *
  */
 
-import { DEFAULT_ACTION } from './constants';
+import { LOAD_GAME } from './constants';
 
-export function defaultAction() {
+export function loadGame(gameId) {
   return {
-    type: DEFAULT_ACTION,
+    type: LOAD_GAME,
+    data: { gameId },
   };
 }

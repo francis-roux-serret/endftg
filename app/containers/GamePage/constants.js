@@ -4,4 +4,4 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/GamePage/DEFAULT_ACTION';
+export const LOAD_GAME = 'app/GamePage/LOAD_GAME';
