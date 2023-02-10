@@ -32,6 +32,7 @@ const BACKGROUNDS = {
 
 function Tile(props) {
   const { tile } = props;
+  const background = BACKGROUNDS[tile.disc || 'empty'];
   const style = {
     position: 'relative',
     left: '50%',
@@ -42,14 +43,14 @@ function Tile(props) {
     height: TILE_H,
     verticalAlign: 'center',
     transform: `scale(${UNZOOM})`,
-    backgroundImage: `url("${BACKGROUNDS[tile.disc || 'empty']}")`,
+    backgroundImage: `url("${background}")`,
     // filter: `opacity(${tile.disc ? 1 : 0.7})`,
     backgroundSize: '100%',
     backgroundPosition: '50%',
     // filter: 'drop-shadow(0 0 10px red)',
   };
 
-  const floatingItems = [<div>ship</div>, <div>ship</div>];
+  const floatingItems = [];
   const vpBadge = `${tile.vp}`;
   const exits = tile.exits.map((exit, index) => {
     const angle = Math.PI / 2 - (index * Math.PI) / 3;
@@ -60,8 +61,8 @@ function Tile(props) {
         key={`key_${angle}`}
         style={{
           position: 'relative',
-          left: x,
-          top: y,
+          left: x + TILE_W / 2,
+          top: y + TILE_H / 2,
           margin: 0,
           padding: 0,
         }}
@@ -76,7 +77,7 @@ function Tile(props) {
         vpBadge.concat('*');
         break;
       case 'ship':
-        floatingItems.push(<div>ship</div>);
+        // floatingItems.push(<div>ship</div>);
         break;
       default:
       // nothing
@@ -85,8 +86,8 @@ function Tile(props) {
 
   return (
     <div style={style}>
-      {floatingItems.map(f => f)}
       {exits.map(e => e)}
+      {/*{floatingItems.map(f => f)}*/}
     </div>
   );
 }

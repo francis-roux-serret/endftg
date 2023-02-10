@@ -7,17 +7,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import warpImg from '../../images/ecl_half_warp.png';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  position: absolute;
+  transform: translate(-50%, -50%);
+`;
 
 function HalfWarpGate(props) {
   const { angle } = props;
   return (
-    <img
-      src={warpImg}
-      alt="warp"
-      style={{
-        transform: `rotate(${angle})`,
-      }}
-    />
+    <Wrapper>
+      <img
+        src={warpImg}
+        alt="warp"
+        style={{
+          transform: `rotate(${Math.PI / 2 - angle}rad) scale(50%)`,
+        }}
+      />
+    </Wrapper>
   );
 }
 
