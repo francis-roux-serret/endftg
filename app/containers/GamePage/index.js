@@ -31,11 +31,8 @@ export function GamePage() {
       ring: 0,
       vp: 4,
       tags: ['center', 'gift', 'artefact', 'workhole'],
-      items: [
-        { kind: 'center' },
-        { kind: 'gift' },
-        { kind: 'wormhole'}
-      ],
+      items: [{ kind: 'center' }, { kind: 'gift' }, { kind: 'wormhole' }],
+      exits: [1, 0, 1, 1, 0, 0],
       planets: [
         { kind: 'planet', id: `001-S-1`, type: 'S', hasColon: false },
         { kind: 'planet', id: `001-S+-2`, type: 'S+', hasColon: false },
