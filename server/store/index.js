@@ -16,15 +16,15 @@ class Store {
     this.games = this.games.filter(g => g.gameId !== data.gameId);
   }
 
-  newGame(data) {
+  newGame(config) {
     let gameId;
     do {
       gameId = `${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
     } while (this.loadGame(gameId));
 
     const gameData = {
-      ...data,
       gameId,
+      config,
     };
     this.saveGame(gameData);
 

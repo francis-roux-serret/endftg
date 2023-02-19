@@ -76,7 +76,7 @@ module.exports = [
   {
     id: 'shd_1',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 2,
     min: 2,
     pow: 0,
@@ -85,7 +85,7 @@ module.exports = [
   {
     id: 'pow_6',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 4,
     min: 3,
     pow: 0,
@@ -94,7 +94,7 @@ module.exports = [
   {
     id: 'hul_2',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 6,
     min: 4,
     pow: 0,
@@ -103,7 +103,7 @@ module.exports = [
   {
     id: 'cpm_2',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 8,
     min: 2,
     pow: 1,
@@ -112,7 +112,7 @@ module.exports = [
   {
     id: 'adv_g',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 10,
     min: 6,
     pow: 0,
@@ -121,7 +121,7 @@ module.exports = [
   {
     id: 'thr_3',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 12,
     min: 6,
     pow: 3,
@@ -130,7 +130,7 @@ module.exports = [
   {
     id: 'can_4',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 14,
     min: 7,
     pow: 4,
@@ -139,17 +139,17 @@ module.exports = [
   {
     id: 'dsc_2',
     group: 'root',
-    color: 'grn',
+    color: 'green',
     price: 16,
     min: 8,
     pow: 0,
     count: 3,
   },
-  // Yellow
+  // yellowlow
   {
     id: 'build',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 2,
     min: 2,
     pow: 0,
@@ -158,7 +158,7 @@ module.exports = [
   {
     id: 'thr_2',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 4,
     min: 3,
     pow: 2,
@@ -167,7 +167,7 @@ module.exports = [
   {
     id: 'orbit',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 6,
     min: 4,
     pow: 0,
@@ -176,7 +176,7 @@ module.exports = [
   {
     id: 'dsc_1',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 8,
     min: 2,
     pow: 0,
@@ -185,7 +185,7 @@ module.exports = [
   {
     id: 'adv_s',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 10,
     min: 6,
     pow: 0,
@@ -194,7 +194,7 @@ module.exports = [
   {
     id: 'monolith',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 12,
     min: 6,
     pow: 0,
@@ -203,7 +203,7 @@ module.exports = [
   {
     id: 'warp_gen',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 14,
     min: 7,
     pow: 0,
@@ -212,7 +212,7 @@ module.exports = [
   {
     id: 'artefact',
     group: 'root',
-    color: 'yel',
+    color: 'yellow',
     price: 16,
     min: 8,
     pow: 0,
@@ -222,7 +222,7 @@ module.exports = [
   {
     id: 'hul_3',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 5,
     min: 5,
     pow: 0,
@@ -231,7 +231,7 @@ module.exports = [
   {
     id: 'anti_neutron',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 5,
     min: 5,
     pow: 0,
@@ -240,7 +240,7 @@ module.exports = [
   {
     id: 'fragment',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 5,
     min: 5,
     pow: 0,
@@ -249,7 +249,7 @@ module.exports = [
   {
     id: 'mov_1',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 7,
     min: 6,
     pow: 0,
@@ -258,7 +258,7 @@ module.exports = [
   {
     id: 'cloak',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 7,
     min: 6,
     pow: 0,
@@ -267,7 +267,7 @@ module.exports = [
   {
     id: 'cmp_hul',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 7,
     min: 6,
     pow: 0,
@@ -276,7 +276,7 @@ module.exports = [
   {
     id: 'shd_pow',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 7,
     min: 6,
     pow: 0,
@@ -285,7 +285,7 @@ module.exports = [
   {
     id: 'thr_3_b',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 9,
     min: 7,
     pow: 0,
@@ -294,7 +294,7 @@ module.exports = [
   {
     id: 'can_3',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 9,
     min: 7,
     pow: 3,
@@ -303,7 +303,7 @@ module.exports = [
   {
     id: 'wormhole',
     group: 'wormhole',
-    color: 'blk',
+    color: 'black',
     price: 9,
     min: 7,
     pow: 0,
@@ -312,7 +312,7 @@ module.exports = [
   {
     id: 'mis_1',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 11,
     min: 8,
     pow: 0,
@@ -321,7 +321,7 @@ module.exports = [
   {
     id: 'bld_1',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 11,
     min: 8,
     pow: 0,
@@ -330,7 +330,7 @@ module.exports = [
   {
     id: 'adv_lab',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 13,
     min: 9,
     pow: 0,
@@ -339,7 +339,7 @@ module.exports = [
   {
     id: 'pow_12',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 15,
     min: 10,
     pow: 0,
@@ -348,7 +348,7 @@ module.exports = [
   {
     id: 'adv_a',
     group: 'root',
-    color: 'blk',
+    color: 'black',
     price: 17,
     min: 11,
     pow: 0,

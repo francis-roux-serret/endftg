@@ -59,6 +59,16 @@ class ItemSack {
       ...data,
     });
   }
+
+  shrinkSack(maxCount) {
+    const newContent = [];
+    let deCount = maxCount;
+    while (deCount && this.sack.count) {
+      newContent.push(this.pickOne());
+      deCount -= 1;
+    }
+    this.sack = newContent;
+  }
 }
 
 class ItemSacks {
@@ -82,6 +92,10 @@ class ItemSacks {
 
   isEmpty(type) {
     return this.getSack(type).isEmpty();
+  }
+
+  shrinkSack(type, max) {
+    return this.getSack(type).shrinkSack(max);
   }
 
   pickOne(type) {

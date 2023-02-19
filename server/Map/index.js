@@ -46,8 +46,7 @@ class Map {
     return result;
   }
 
-  generatePlanet(tileId, planetType)
-  {
+  generatePlanet(tileId, planetType) {
     this.currentPlanetId += 1;
 
     return {
