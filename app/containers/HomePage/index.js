@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import injectSaga from 'utils/injectSaga';
@@ -98,10 +99,10 @@ HomePage.propTypes = {
   saveGameSettings: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  players: makeSelectPlayers()(state),
-  npcs: makeSelectNpcs()(state),
-  modules: makeSelectModules()(state),
+const mapStateToProps = createStructuredSelector({
+  players: makeSelectPlayers(),
+  npcs: makeSelectNpcs(),
+  modules: makeSelectModules(),
 });
 
 // `mode` is an optional argument, default value is `DAEMON`
