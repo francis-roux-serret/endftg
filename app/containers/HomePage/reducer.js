@@ -1,4 +1,4 @@
-import { SAVE_GAME_SETTINGS } from './constants';
+import { CREATE_GAME, SAVE_GAME_SETTINGS } from './constants';
 import colors from './colors';
 
 export const initialState = {

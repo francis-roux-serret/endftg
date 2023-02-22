@@ -4,5 +4,6 @@
  *
  */
 
-export const CREATE_GAME = 'app/HomePage/CREATE_GAME';
 export const SAVE_GAME_SETTINGS = 'app/HomePage/SAVE_GAME_SETTINGS';
+export const CREATE_GAME = 'app/HomePage/CREATE_GAME';
+export const CONNECT_PLAYERS = 'app/HomePage/CONNECT_PLAYERS';

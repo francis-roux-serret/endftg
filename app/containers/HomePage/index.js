@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import injectSaga, { useInjectSaga } from 'utils/injectSaga';
+import { useInjectSaga } from 'utils/injectSaga';
 import { DAEMON } from 'utils/constants';
 
 import messages from './messages';
+import reducer from './reducer';
 import saga from './saga';
 import { createGame, saveGameSettings } from './actions';
 import {
@@ -19,12 +20,11 @@ import {
 
 import GameConfigurationForm from '../../components/GameConfigurationForm';
 import { useInjectReducer } from '../../utils/injectReducer';
-import reducer from './reducer';
 
-const key = 'homepage';
+const key = 'homePage';
 function HomePage(props) {
   useInjectReducer({ key, reducer });
-  useInjectSaga({ key, saga });
+  useInjectSaga({ key, saga, mode: DAEMON });
 
   const { players, modules, npcs } = props;
   const colors = ['red', 'green', 'blue', 'black', 'white', 'yellow'];
@@ -74,7 +74,7 @@ function HomePage(props) {
   };
 
   const handleStartGame = () => {
-    createGame({ players, modules, npcs });
+    props.createGame({ players, modules, npcs });
   };
 
   return (
