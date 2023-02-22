@@ -1,1 +1,1 @@
-module.epxorts = ['red', 'green', 'blue', 'black', 'white', 'yellow'];
+export default ['red', 'green', 'blue', 'black', 'white', 'yellow'];

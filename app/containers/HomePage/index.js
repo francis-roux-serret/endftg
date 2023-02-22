@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import injectSaga from 'utils/injectSaga';
+import injectSaga, { useInjectSaga } from 'utils/injectSaga';
 import { DAEMON } from 'utils/constants';
 
 import messages from './messages';
@@ -18,8 +18,14 @@ import {
 } from './selectors';
 
 import GameConfigurationForm from '../../components/GameConfigurationForm';
+import { useInjectReducer } from '../../utils/injectReducer';
+import reducer from './reducer';
 
+const key = 'homepage';
 function HomePage(props) {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
+
   const { players, modules, npcs } = props;
   const colors = ['red', 'green', 'blue', 'black', 'white', 'yellow'];
   const playerLabel = props.intl.formatMessage(messages.player);
@@ -105,13 +111,11 @@ const mapStateToProps = createStructuredSelector({
   modules: makeSelectModules(),
 });
 
-// `mode` is an optional argument, default value is `DAEMON`
-const withSaga = injectSaga({ key: 'homepage', saga, mode: DAEMON });
-
+const withConnect = connect(
+  mapStateToProps,
+  { saveGameSettings, createGame },
+);
 export default compose(
-  withSaga,
-  connect(
-    mapStateToProps,
-    { createGame, saveGameSettings },
-  ),
-)(injectIntl(HomePage));
+  withConnect,
+  injectIntl,
+)(HomePage);
