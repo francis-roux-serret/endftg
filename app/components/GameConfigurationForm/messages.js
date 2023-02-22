@@ -110,38 +110,38 @@ export default defineMessages({
   game: {
     legend: {
       id: `${scope}.game.legend`,
-      defaultMessage: 'Game options',
+      defaultMessage: 'Game add-ons',
     },
     module: {
       wormholes: {
         id: `${scope}.game.module.wormholes`,
-        defaultMessage: 'wormholes',
+        defaultMessage: 'Wormholes',
       },
       minorSpecies: {
         id: `${scope}.game.module.minorSpecies`,
-        defaultMessage: 'minorSpecies',
+        defaultMessage: 'Minor Species',
       },
       galacticEvents: {
         id: `${scope}.game.module.galacticEvents`,
-        defaultMessage: 'galacticEvents',
+        defaultMessage: 'Galactic Events',
       },
       riftCanon: {
         id: `${scope}.game.module.riftCanon`,
-        defaultMessage: 'riftCanon',
+        defaultMessage: 'Rift Canon',
       },
       turnOrder: {
         id: `${scope}.game.module.turnOrder`,
-        defaultMessage: 'turnOrder',
+        defaultMessage: 'Turn Order',
       },
       fifthPlayerWormholes: {
         id: `${scope}.game.module.fifthPlayerWormholes`,
-        defaultMessage: 'fifthPlayerWormholes',
+        defaultMessage: '5th Player Wormholes',
       },
     },
     npcs: {
       legend: {
         id: `${scope}.game.npcs.legend`,
-        defaultMessage: 'NPCs',
+        defaultMessage: 'NPCs difficulty',
       },
       center: {
         id: `${scope}.game.npcs.center`,
@@ -157,7 +157,7 @@ export default defineMessages({
       },
       knownAtStart: {
         id: `${scope}.game.npcs.knownAtStart`,
-        defaultMessage: 'knownAtStart',
+        defaultMessage: 'NPCs difficulty known at start',
       },
       choices: {
         easy: {
@@ -170,11 +170,11 @@ export default defineMessages({
         },
         randomPerGame: {
           id: `${scope}.game.npcs.choices.randomPerGame`,
-          defaultMessage: 'randomPerGame',
+          defaultMessage: 'random per game',
         },
         randomPerTile: {
           id: `${scope}.game.npcs.choices.randomPerTile`,
-          defaultMessage: 'randomPerTile',
+          defaultMessage: 'random per tile',
         },
       },
     },

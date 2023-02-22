@@ -7,19 +7,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import messages from './messages';
 
 function GameConfigurationForm(props) {
+  const { players, modules, npcs } = props;
   const allModules = [
     'wormholes',
     'minorSpecies',
     'galacticEvents',
     'riftCanon',
     'turnOrder',
-    'fifthPlayerWormholes',
   ];
+  if (players.length === 5) {
+    allModules.push('fifthPlayerWormholes');
+  }
   const allColors = [
     { color: 'red', backgroundColor: 'white' },
     { color: 'green', backgroundColor: 'white' },
@@ -62,7 +64,7 @@ function GameConfigurationForm(props) {
   const usedRaces = [];
   const usedColors = [];
   const usedNickNames = [];
-  props.players.forEach((player, index) => {
+  players.forEach((player, index) => {
     if (player.race !== 'human') {
       if (usedRaces.includes(player.race)) {
         errors.push(`race ${player.race} is used more than once`);
@@ -85,37 +87,33 @@ function GameConfigurationForm(props) {
   });
 
   const handleAddPlayer = () => {
-    props.onPlayerAdd(props.players.length);
+    props.onPlayerAdd(players.length);
   };
 
   const handleModuleChange = module => {
-    if (props.gameSettings.modules.includes(module)) {
+    if (modules.includes(module)) {
       props.onGameChange({
-        ...props.gameSettings,
-        modules: props.gameSettings.modules.filter(m => m !== module),
+        modules: modules.filter(m => m !== module),
       });
     } else {
       props.onGameChange({
-        ...props.gameSettings,
-        modules: [...props.gameSettings.modules, module],
+        modules: [...modules, module],
       });
     }
   };
   const handleSetNpcChoice = (npc, choice) => {
     props.onGameChange({
-      ...props.gameSettings,
       npcs: {
-        ...props.gameSettings.npcs,
+        ...npcs,
         [npc]: choice,
       },
     });
   };
   const handleChangeKnownAtStart = () => {
     props.onGameChange({
-      ...props.gameSettings,
       npcs: {
-        ...props.gameSettings.npcs,
-        knownAtStart: !props.gameSettings.npcs.knownAtStart,
+        ...npcs,
+        knownAtStart: !npcs.knownAtStart,
       },
     });
   };
@@ -133,7 +131,7 @@ function GameConfigurationForm(props) {
           <tbody>
             <tr>
               <td width="50%">
-                {props.players.map((player, index) => (
+                {players.map((player, index) => (
                   <fieldset key={player.id}>
                     <legend>
                       <FormattedMessage {...messages.player} /> {index + 1}
@@ -197,7 +195,7 @@ function GameConfigurationForm(props) {
                       </select>
                     </label>
                     &nbsp;
-                    {props.players.length > 2 ? (
+                    {players.length > 2 ? (
                       <button
                         type="button"
                         onClick={() => props.onPlayerDelete(index)}
@@ -207,7 +205,7 @@ function GameConfigurationForm(props) {
                     ) : null}
                   </fieldset>
                 ))}
-                {props.players.length < 6 ? (
+                {players.length < 6 ? (
                   <button type="button" onClick={handleAddPlayer}>
                     <FormattedMessage {...messages.button.add} />
                   </button>
@@ -218,7 +216,7 @@ function GameConfigurationForm(props) {
                   </p>
                 ))}
               </td>
-              <td width="25%">
+              <td width="20%">
                 <fieldset>
                   <legend>
                     <FormattedMessage {...messages.game.legend} />
@@ -228,8 +226,9 @@ function GameConfigurationForm(props) {
                       <label>
                         <input
                           type="checkbox"
-                          checked={props.gameSettings.modules.includes(module)}
+                          checked={modules.includes(module)}
                           onChange={() => handleModuleChange(module)}
+                          style={{ marginRight: '0.3em' }}
                         />
                         <FormattedMessage {...messages.game.module[module]} />
                       </label>
@@ -237,7 +236,7 @@ function GameConfigurationForm(props) {
                   ))}
                 </fieldset>
               </td>
-              <td width="25%">
+              <td width="30%">
                 <fieldset>
                   <legend>
                     <FormattedMessage {...messages.game.npcs.legend} />
@@ -246,11 +245,12 @@ function GameConfigurationForm(props) {
                     <fieldset key={npc}>
                       <legend>{npc}</legend>
                       {npcChoices.map(choice => (
-                        <label key={choice}>
+                        <label key={choice} style={{ marginRight: '1em' }}>
                           <input
                             type="radio"
                             value={choice}
-                            checked={props.gameSettings.npcs[npc] === choice}
+                            checked={npcs[npc] === choice}
+                            style={{ marginRight: '0.3em' }}
                             onChange={e =>
                               handleSetNpcChoice(npc, e.target.value)
                             }
@@ -265,7 +265,8 @@ function GameConfigurationForm(props) {
                   <label>
                     <input
                       type="checkbox"
-                      checked={props.gameSettings.npcs.knownAtStart}
+                      checked={npcs.knownAtStart}
+                      style={{ marginRight: '0.3em' }}
                       onChange={handleChangeKnownAtStart}
                     />
                     <FormattedMessage {...messages.game.npcs.knownAtStart} />
@@ -276,13 +277,14 @@ function GameConfigurationForm(props) {
           </tbody>
         </table>
         {errors.length === 0 ? (
-          <button type="button" onClick={props.onValidate}>
+          <button
+            type="button"
+            onClick={props.onValidate}
+            style={{ marginTop: '1em' }}
+          >
             <FormattedMessage {...messages.button.validate} />
           </button>
         ) : null}
-        <button type="button" onClick={props.onCancel}>
-          <FormattedMessage {...messages.button.cancel} />
-        </button>
       </form>
       <h2>Summary of races</h2>
       <ul>
@@ -419,8 +421,8 @@ function GameConfigurationForm(props) {
             for you WILL be attacked by other players.
           </p>
           <p>
-            <strong>Strong point</strong> : You should lock your domain and win
-            the game by resisting to invasions.
+            <strong>Strong point</strong> : You should expand and lock your
+            domain and win the game by resisting to invasions.
           </p>
         </li>
       </ul>
@@ -431,13 +433,13 @@ function GameConfigurationForm(props) {
 GameConfigurationForm.propTypes = {
   intl: intlShape.isRequired,
   players: PropTypes.arrayOf(PropTypes.object).isRequired,
-  gameSettings: PropTypes.object.isRequired,
+  npcs: PropTypes.object.isRequired,
+  modules: PropTypes.array.isRequired,
   onPlayerAdd: PropTypes.func.isRequired,
   onPlayerDelete: PropTypes.func.isRequired,
   onPlayerChange: PropTypes.func.isRequired,
   onGameChange: PropTypes.func.isRequired,
   onValidate: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
 };
 
 export default injectIntl(GameConfigurationForm);

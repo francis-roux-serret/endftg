@@ -12,4 +12,8 @@ export default defineMessages({
     id: `${scope}.header`,
     defaultMessage: 'Eclipse: Second Dawn For The Galaxy Online',
   },
+  player: {
+    id: `${scope}.player`,
+    defaultMessage: 'Player',
+  },
 });

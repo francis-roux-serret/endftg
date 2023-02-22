@@ -1,30 +1,27 @@
-/*
- * HomePage
- *
- * This is the first thing rs see of our App, at the '/' route
- *
- */
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import injectSaga from 'utils/injectSaga';
+import { DAEMON } from 'utils/constants';
+
 import messages from './messages';
+import saga from './saga';
+import { createGame, saveGameSettings } from './actions';
+import {
+  makeSelectModules,
+  makeSelectNpcs,
+  makeSelectPlayers,
+} from './selectors';
+
 import GameConfigurationForm from '../../components/GameConfigurationForm';
 
-export default function HomePage() {
+function HomePage(props) {
+  const { players, modules, npcs } = props;
   const colors = ['red', 'green', 'blue', 'black', 'white', 'yellow'];
-  const [players, setPlayers] = useState([
-    { id: 1, race: 'human', color: colors[0], nickname: 'Player 1' },
-    { id: 2, race: 'human', color: colors[1], nickname: 'Player 2' },
-  ]);
-  const [gameSettings, setGameSettings] = useState({
-    npcs: {
-      center: 'easy',
-      ancient: 'easy',
-      guardian: 'easy',
-      knownAtStart: true,
-    },
-    modules: ['wormholes'],
-  });
+  const playerLabel = props.intl.formatMessage(messages.player);
 
   const handleChangePlayer = player => {
     const forcedColors = {
@@ -39,31 +36,39 @@ export default function HomePage() {
       ...player,
       color: forcedColors[player.race] || player.color,
     };
-    setPlayers(players.map(p => (p.id === player.id ? updatedPlayer : p)));
+    props.saveGameSettings({
+      players: players.map(p => (p.id === player.id ? updatedPlayer : p)),
+    });
   };
 
   const handleChangeGame = newSettings => {
-    setGameSettings(newSettings);
+    props.saveGameSettings(newSettings);
   };
 
   const handleAddPlayer = () => {
     const maxId = players.reduce((a, v) => (a < v.id ? v.id : a), 0);
-    setPlayers([
-      ...players,
-      {
-        id: maxId + 1,
-        race: 'human',
-        color: colors[players.length],
-        nickname: `Player ${maxId + 1}`,
-      },
-    ]);
+    props.saveGameSettings({
+      players: [
+        ...players,
+        {
+          id: maxId + 1,
+          race: 'human',
+          color: colors[players.length],
+          nickname: `${playerLabel} ${maxId + 1}`,
+        },
+      ],
+    });
   };
 
   const handleRemovePlayer = index => {
-    setPlayers(players.filter((p, i) => i !== index));
+    props.saveGameSettings({
+      players: players.filter((p, i) => i !== index),
+    });
   };
 
-  const dullFunc = () => {};
+  const handleStartGame = () => {
+    createGame({ players, modules, npcs });
+  };
 
   return (
     <div>
@@ -72,14 +77,40 @@ export default function HomePage() {
       </h1>
       <GameConfigurationForm
         players={players}
-        gameSettings={gameSettings}
+        modules={modules}
+        npcs={npcs}
         onPlayerAdd={handleAddPlayer}
         onPlayerDelete={handleRemovePlayer}
         onPlayerChange={handleChangePlayer}
         onGameChange={handleChangeGame}
-        onValidate={dullFunc}
-        onCancel={dullFunc}
+        onValidate={handleStartGame}
       />
     </div>
   );
 }
+
+HomePage.propTypes = {
+  intl: intlShape.isRequired,
+  players: PropTypes.arrayOf(PropTypes.object).isRequired,
+  npcs: PropTypes.object.isRequired,
+  modules: PropTypes.array.isRequired,
+  createGame: PropTypes.func.isRequired,
+  saveGameSettings: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  players: makeSelectPlayers()(state),
+  npcs: makeSelectNpcs()(state),
+  modules: makeSelectModules()(state),
+});
+
+// `mode` is an optional argument, default value is `DAEMON`
+const withSaga = injectSaga({ key: 'homepage', saga, mode: DAEMON });
+
+export default compose(
+  withSaga,
+  connect(
+    mapStateToProps,
+    { createGame, saveGameSettings },
+  ),
+)(injectIntl(HomePage));
