@@ -8,7 +8,7 @@ const mapItemsMapping = {
   artefact: ['artefact'],
 };
 
-class Map {
+class StarMap {
   /**
    * @param {import('../ItemSacks')} itemSacks
    */
@@ -16,6 +16,18 @@ class Map {
     this.itemSacks = itemSacks;
     this.tiles = [];
     this.currentPlanetId = 0;
+  }
+
+  serialize() {
+    return {
+      tiles: this.tiles,
+      currentPlanetId: this.currentPlanetId,
+    };
+  }
+
+  deserialize(data) {
+    this.tiles = data.tiles;
+    this.currentPlanetId = data.currentPlanetId;
   }
 
   createTile(x, y) {
@@ -59,7 +71,6 @@ class Map {
 
   generateTile(tileTemplate) {
     const self = this;
-
     return {
       id: tileTemplate.id,
       ring: tileTemplate.ring,
@@ -69,7 +80,7 @@ class Map {
       tags: tileTemplate.tags,
       background: tileTemplate.background,
       items: [],
-      planets: tileTemplate.map(planetType =>
+      planets: tileTemplate.planets.map(planetType =>
         self.generatePlanet(tileTemplate.id, planetType),
       ),
     };
@@ -109,6 +120,9 @@ class Map {
           }
           deltas.forEach((delta, index) => {
             const neighbour = this.getTile(x + delta.x, y + delta.y);
+            if (!neighbour) {
+              return;
+            }
             const neighbourLink = neighbour.exits[(index + 3) % 6];
             const tileLink = tile.exits[index];
             let kind = 'none';
@@ -172,6 +186,4 @@ class Map {
   }
 }
 
-const instance = new Map();
-
-module.exports = instance;
+module.exports = StarMap;

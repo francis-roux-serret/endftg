@@ -2,35 +2,43 @@ import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
 /**
- * Direct selector to the homePage state domain
+ * Direct selector to the homePage substate domain
  */
 
-const selectHomePage = state => state.homePage || initialState;
+const selectHomePageDomain = state => state.homePage || initialState;
 
 /**
  * Other specific selectors
  */
 
-/**
- * Default selector used by HomePage
- */
-
 const makeSelectPlayers = () =>
   createSelector(
-    selectHomePage,
-    state => state.players,
+    selectHomePageDomain,
+    substate => substate.players,
   );
 
 const makeSelectModules = () =>
   createSelector(
-    selectHomePage,
-    state => state.modules,
+    selectHomePageDomain,
+    substate => substate.modules,
+  );
+
+const makeSelectGameStarting = () =>
+  createSelector(
+    selectHomePageDomain,
+    substate => substate.gameStarting,
   );
 
 const makeSelectNpcs = () =>
   createSelector(
-    selectHomePage,
-    state => state.npcs,
+    selectHomePageDomain,
+    substate => substate.npcs,
   );
 
-export { selectHomePage, makeSelectPlayers, makeSelectModules, makeSelectNpcs };
+export {
+  selectHomePageDomain,
+  makeSelectPlayers,
+  makeSelectModules,
+  makeSelectNpcs,
+  makeSelectGameStarting,
+};

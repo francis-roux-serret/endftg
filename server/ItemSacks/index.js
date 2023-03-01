@@ -34,7 +34,7 @@ class ItemSack {
       };
     }
     if (this.random) {
-      return randomPick(this.sack, 1, true);
+      return randomPick(this.sack, 1, true)[0];
     }
 
     return this.isFIFO ? this.sack.shift() : this.sack.pop();
@@ -74,6 +74,16 @@ class ItemSack {
 class ItemSacks {
   constructor() {
     this.sacks = [];
+  }
+
+  serialize() {
+    return {
+      sacks: this.sacks,
+    };
+  }
+
+  deserialize(data) {
+    this.sacks = data.sacks;
   }
 
   /** @private */

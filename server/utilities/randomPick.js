@@ -7,7 +7,7 @@ module.exports = function randomPick(ensemble, nb, mutateIt = true) {
   const selection = [];
   for (let i = 0; i < nb; i += 1) {
     const pos = Math.floor(Math.random() * group.length);
-    const item = group.length.splice(pos, 1);
+    const item = group.splice(pos, 1);
     selection.push(item[0]);
   }
 

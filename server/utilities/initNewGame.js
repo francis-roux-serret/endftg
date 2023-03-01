@@ -1,5 +1,7 @@
+const crypto = require('crypto');
+
 const store = require('../store');
-const Map = require('../Map');
+const StarMap = require('../StarMap');
 const TechnoBaord = require('../TechnoBoard');
 const randomPick = require('./randomPick');
 
@@ -8,6 +10,7 @@ const species = require('../reference/species');
 const technos = require('../reference/technos');
 const gifts = require('../reference/gifts');
 const tiles = require('../reference/tiles');
+const ItemSacks = require('../ItemSacks');
 
 function createShip(color, race, type) {
   return { kind: 'ship', color, race, type };
@@ -19,6 +22,7 @@ function createBadge(vp) {
 
 /* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["gameData"] }] */
 function initSacks(gameData) {
+  gameData.itemSacks = new ItemSacks();
   // Player constructions sacks
   gameData.config.players.forEach(p => {
     const shipTypes = [
@@ -31,7 +35,7 @@ function initSacks(gameData) {
     ];
     shipTypes.forEach(({ type, nb }) => {
       const sackName = `${p.color}-${type}`;
-      gameData.temSacks.createSack(sackName, nb > 0, false);
+      gameData.itemSacks.createSack(sackName, nb > 0, false);
       for (let i = 0; i < (nb || 1); i += 1) {
         gameData.itemSacks.addOne(sackName, createShip(p.color, p.race, type));
       }
@@ -58,6 +62,7 @@ function initSacks(gameData) {
   gameData.itemSacks.addOne('artefact', { kind: 'artefact' });
 
   // Modules specific sacks
+  gameData.config.modules.push('root');
   if (gameData.config.modules.includes('wormhole')) {
     gameData.itemSacks.createSack('wormhole', false, false);
     gameData.itemSacks.addOne('wormhole', { kind: 'wormhole' });
@@ -67,7 +72,7 @@ function initSacks(gameData) {
   gameData.itemSacks.createSack('gift', true, true);
   gifts
     .filter(gift => gameData.config.modules.includes(gift.group))
-    .foreach(gift => {
+    .forEach(gift => {
       for (let i = 0; i < gift.count; i += 1) {
         gameData.itemSacks.addOne('gift', gift);
       }
@@ -77,7 +82,7 @@ function initSacks(gameData) {
   gameData.itemSacks.createSack('techno', true, true);
   technos
     .filter(techno => gameData.config.modules.includes(techno.group))
-    .foreach(techno => {
+    .forEach(techno => {
       for (let i = 0; i < techno.count; i += 1) {
         gameData.itemSacks.addOne('techno', techno);
       }
@@ -104,33 +109,63 @@ function initSacks(gameData) {
   return gameData.itemSacks;
 }
 
+function createPlayersHashes(gameData) {
+  gameData.players = gameData.players.map(player => {
+    let longHash = null;
+    let hash = null;
+    let exists = true;
+    let attempt = 200;
+    while (exists && attempt) {
+      const RANGE = 1000000;
+      const x = Math.round(Math.random() * RANGE);
+      const shasum = crypto.createHash('sha1');
+      shasum.update(`${x}`);
+      longHash = shasum.digest('hex');
+      hash = longHash.substring(0, 6);
+      exists = store.checkIfHashExists(hash);
+      attempt -= 1;
+    }
+    if (exists) throw new Error('Server is full');
+
+    return {
+      ...player,
+      longHash,
+      hash,
+    };
+  });
+}
+
 function initGame(gameData) {
-  gameData.map.addTile(0, 0, 0, gameData.itemSacks.pickOne('ring0'));
+  const centerTileTemplate = gameData.itemSacks.pickOne('ring0');
+  gameData.starmap.addTile(0, 0, 0, centerTileTemplate);
   const playerTemplate = species.find(s => s.id === 'human');
   const sectors = [...playerTemplate.sectors];
 
   const countBasedConfig = playerCountConfig[gameData.config.players.length];
   countBasedConfig.positions.forEach(({ x, y }, index) => {
-    const tileId = randomPick(sectors, 1, true);
-    const tile = gameData.itemSacks.pickWithId('ring2', tileId);
-    gameData.map.addTile(x, y, index, tile);
+    const tileId = randomPick(sectors, 1, true)[0];
+    const tile = gameData.itemSacks.pickWithId('homeTile', tileId);
+    gameData.starmap.addTile(x, y, index, tile);
   });
 
   gameData.alliances = countBasedConfig.alliances;
   gameData.nbPick = countBasedConfig.nbPick;
   gameData.technoBoard.pickNewTechnos(countBasedConfig.nbTechnos);
   gameData.itemSacks.shrinkSack('ring3', countBasedConfig.nbSector3);
+  gameData.players = [...gameData.config.players];
 }
 
-function initNewGameStore(config) {
+function initNewGame(config) {
   const gameData = store.newGame(config);
-  const sacks = initSacks(gameData);
-  gameData.map = new Map(sacks);
+  initSacks(gameData);
+  gameData.starmap = new StarMap(gameData.itemSacks);
   gameData.technoBoard = new TechnoBaord(gameData.itemSacks);
   initGame(gameData);
+  createPlayersHashes(gameData);
+
   store.saveGame(gameData);
 
   return gameData;
 }
 
-module.exports = initNewGameStore;
+module.exports = initNewGame;

@@ -22,7 +22,7 @@ export const initialState = {
     },
     round: 0,
     players: [],
-    map: [],
+    starmap: [],
     market: [],
   },
 };

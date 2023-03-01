@@ -26,6 +26,16 @@ class TechnoBoard {
     ];
   }
 
+  serialize() {
+    return {
+      trees: this.trees
+    };
+  }
+
+  deserialize(data) {
+    this.trees = data.trees;
+  }
+
   clearIsNew() {
     this.trees = this.trees.map(tree => ({
       ...tree,
@@ -37,7 +47,7 @@ class TechnoBoard {
     this.clearIsNew();
     let deCount = count;
     while (deCount > 0) {
-      const techno = this.gameSacks.pickOne('techno');
+      const techno = this.itemSacks.pickOne('techno');
       const tree = this.trees.find(t => t.color === techno.color);
       if (techno.color === BLACK_TECHNO_COLOR) {
         tree.tiles.push({ price: techno.price, isNew: true, stack: [techno] });

@@ -113,8 +113,8 @@ export default defineMessages({
       defaultMessage: 'Game add-ons',
     },
     module: {
-      wormholes: {
-        id: `${scope}.game.module.wormholes`,
+      wormhole: {
+        id: `${scope}.game.module.wormhole`,
         defaultMessage: 'Wormholes',
       },
       minorSpecies: {

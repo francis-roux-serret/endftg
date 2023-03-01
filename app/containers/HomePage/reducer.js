@@ -1,4 +1,4 @@
-import { CREATE_GAME, SAVE_GAME_SETTINGS } from './constants';
+import { CONNECT_PLAYERS, CREATE_GAME, SAVE_GAME_SETTINGS } from './constants';
 import colors from './colors';
 
 export const initialState = {
@@ -6,13 +6,14 @@ export const initialState = {
     { id: 1, race: 'human', color: colors[0], nickname: 'Player 1' },
     { id: 2, race: 'human', color: colors[1], nickname: 'Player 2' },
   ],
-  modules: ['wormholes'],
+  modules: ['wormhole'],
   npcs: {
     center: 'easy',
     ancient: 'easy',
     guardian: 'easy',
     knownAtStart: true,
   },
+  gameStarting: false,
 };
 
 export default (state = initialState, action) => {
@@ -22,7 +23,12 @@ export default (state = initialState, action) => {
         ...state,
         ...action.data,
       };
-
+    case CONNECT_PLAYERS:
+      return {
+        ...state,
+        players: action.data.players,
+        gameStarting: true,
+      };
     default:
       return state;
   }

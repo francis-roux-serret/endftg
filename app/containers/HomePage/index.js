@@ -11,8 +11,9 @@ import { DAEMON } from 'utils/constants';
 import messages from './messages';
 import reducer from './reducer';
 import saga from './saga';
-import { createGame, saveGameSettings } from './actions';
+import { connectOnePlayer, createGame, saveGameSettings } from './actions';
 import {
+  makeSelectGameStarting,
   makeSelectModules,
   makeSelectNpcs,
   makeSelectPlayers,
@@ -20,13 +21,14 @@ import {
 
 import GameConfigurationForm from '../../components/GameConfigurationForm';
 import { useInjectReducer } from '../../utils/injectReducer';
+import PlayerHashInput from '../../components/PlayerHashInput';
 
 const key = 'homePage';
 function HomePage(props) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga, mode: DAEMON });
 
-  const { players, modules, npcs } = props;
+  const { players, modules, npcs, gameStarting } = props;
   const colors = ['red', 'green', 'blue', 'black', 'white', 'yellow'];
   const playerLabel = props.intl.formatMessage(messages.player);
 
@@ -77,15 +79,23 @@ function HomePage(props) {
     props.createGame({ players, modules, npcs });
   };
 
+  const handleHashInput = hash => {
+    props.connectOnePlayer(hash, longHash => {
+      props.history.push(`/game?hash=${longHash}`);
+    });
+  };
+
   return (
     <div>
       <h1>
         <FormattedMessage {...messages.header} />
       </h1>
+      <PlayerHashInput onChange={handleHashInput} />
       <GameConfigurationForm
         players={players}
         modules={modules}
         npcs={npcs}
+        gameStarting={gameStarting}
         onPlayerAdd={handleAddPlayer}
         onPlayerDelete={handleRemovePlayer}
         onPlayerChange={handleChangePlayer}
@@ -101,7 +111,10 @@ HomePage.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object).isRequired,
   npcs: PropTypes.object.isRequired,
   modules: PropTypes.array.isRequired,
+  gameStarting: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired,
   createGame: PropTypes.func.isRequired,
+  connectOnePlayer: PropTypes.func.isRequired,
   saveGameSettings: PropTypes.func.isRequired,
 };
 
@@ -109,11 +122,12 @@ const mapStateToProps = createStructuredSelector({
   players: makeSelectPlayers(),
   npcs: makeSelectNpcs(),
   modules: makeSelectModules(),
+  gameStarting: makeSelectGameStarting(),
 });
 
 const withConnect = connect(
   mapStateToProps,
-  { saveGameSettings, createGame },
+  { saveGameSettings, createGame, connectOnePlayer },
 );
 export default compose(
   withConnect,

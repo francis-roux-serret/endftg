@@ -2,6 +2,7 @@
 
 const express = require('express');
 const logger = require('./logger');
+const store = require('./store');
 
 const argv = require('./argv');
 const port = require('./port');
@@ -14,6 +15,7 @@ const ngrok =
     : false;
 const { resolve } = require('path');
 const app = express();
+app.use(express.json());
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 app.use('/api', api);
@@ -36,22 +38,31 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-// Start your app.
-app.listen(port, host, async err => {
-  if (err) {
-    return logger.error(err.message);
-  }
+logger.info('Loading games from save...');
 
-  // Connect to ngrok in dev mode
-  if (ngrok) {
-    let url;
-    try {
-      url = await ngrok.connect(port);
-    } catch (e) {
-      return logger.error(e);
-    }
-    logger.appStarted(port, prettyHost, url);
-  } else {
-    logger.appStarted(port, prettyHost);
-  }
-});
+store
+  .loadFromDisk()
+  .then(() => {
+    // Start your app.
+    app.listen(port, host, async err => {
+      if (err) {
+        return logger.error(err.message);
+      }
+
+      // Connect to ngrok in dev mode
+      if (ngrok) {
+        let url;
+        try {
+          url = await ngrok.connect(port);
+        } catch (e) {
+          return logger.error(e);
+        }
+        logger.appStarted(port, prettyHost, url);
+      } else {
+        logger.appStarted(port, prettyHost);
+      }
+    });
+  })
+  .catch(err => {
+    logger.error(err);
+  });
