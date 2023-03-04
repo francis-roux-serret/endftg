@@ -13,9 +13,9 @@ module.exports = [
     initialShips: ['interceptor'],
     prices: {
       interceptor: 3,
-      fregate: 5,
-      cruiser: 8,
-      starBase: 3,
+      cruiser: 5,
+      dreadnought: 8,
+      starbase: 3,
       orbital: 4,
       monolith: 10,
     },
@@ -35,9 +35,9 @@ module.exports = [
           { id: 'B', part: null },
         ],
       },
-      fregate: {
+      cruiser: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
-        ihm: 'fregate_std',
+        ihm: 'cruiser_std',
         parts: [
           { id: 'hull', part: null },
           { id: 'T', part: 'can_1' },
@@ -48,9 +48,9 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      cruiser: {
+      dreadnought: {
         stats: { ini: 0, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
-        ihm: 'cruiser_std',
+        ihm: 'dreadnought_std',
         parts: [
           { id: 'hull', part: null },
           { id: 'T1', part: 'can_1' },

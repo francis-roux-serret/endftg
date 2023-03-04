@@ -45,7 +45,7 @@ function GameDoc() {
             Play Orion Hegemony if you want to play aggressive from start.
             <br />
             You will have the strongest fleet at the sart of game, and start
-            with a cruiser where other players have only an interceptor.
+            with a dreadnought where other players have only an interceptor.
             <br />
             You have an extra victory point slot, but lack one alliance
             slot.

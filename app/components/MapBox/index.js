@@ -8,17 +8,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Tile from './Tile';
+import { BOARD_H, BOARD_W } from './constants';
+import imgGalaxy from '../../images/ecl_galaxy.png';
 
 const Wrapper = styled.div`
   background-color: #003;
   padding: 0;
   margin: 0;
-  border: 1px solid #22c;
-  border-radius: 16px;
+  border: 0;
+  width: ${BOARD_W}px;
+  height: ${BOARD_H}px;
+  position: relative;
+  background-image: url(${imgGalaxy});
+  background-position: center;
+  background-repeat: round;
 `;
 function MapBox(props) {
   return (
-    <Wrapper style={{ width: 800, height: 800 }}>
+    <Wrapper>
       {props.tiles.map(tile => (
         <Tile key={tile.id} tile={tile} />
       ))}

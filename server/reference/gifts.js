@@ -4,7 +4,7 @@ module.exports = [
   { kind: 'g_resource', group: 'root', data: { s: 5 }, count: 3 },
   { kind: 'g_resource', group: 'root', data: { g: 8 }, count: 3 },
   { kind: 'g_resource', group: 'root', data: { orb: 1, m: 2 }, count: 2 },
-  { kind: 'g_resource', group: 'root', data: { cruiser: 1 }, count: 3 },
+  { kind: 'g_resource', group: 'root', data: { dreadnought: 1 }, count: 3 },
   { kind: 'g_resource', group: 'root', data: { monolith: 1 }, count: 1 },
   { kind: 'g_techno', group: 'root', count: 3 },
   { kind: 'g_shd3_i1', group: 'root', count: 1 },

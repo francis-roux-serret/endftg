@@ -1,50 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { BACKGROUNDS, TILE_H, TILE_W, UNZOOM } from './constants';
+
+import {
+  BACKGROUNDS,
+  ITEMS_DISTANCE,
+  PLANETS_DISTANCE,
+  SHIPS_DISTANCE,
+  TILE_H,
+  TILE_W,
+  UNZOOM,
+} from './constants';
 import TileExit from './TileExit';
+import items from './items';
+import Ship from './Ship';
+import Positionner from './Positionner';
+import Planet from './Planet';
+import VPBadge from './VPBadge';
 
 function Tile(props) {
+  const [isHover, setHover] = useState(false);
   const { tile } = props;
   const background = BACKGROUNDS[tile.disc || 'empty'];
+  const zoom = isHover ? 1 : UNZOOM;
   const style = {
-    position: 'relative',
+    overflow: 'show',
+    position: 'absolute',
     left: '50%',
     top: '50%',
-    marginLeft: -TILE_W / 2 + props.tile.x * TILE_W,
-    marginTop: -TILE_H / 2 + props.tile.y * TILE_H,
+    marginLeft: tile.x * TILE_W * (3 / 4) * UNZOOM,
+    marginTop: ((tile.y * TILE_H) / 2) * UNZOOM,
     width: TILE_W,
     height: TILE_H,
     verticalAlign: 'center',
-    transform: `scale(${UNZOOM})`,
+    transform: `translate(-50%, -50%) scale(${zoom})`,
+    zIndex: isHover ? 1000 : 0,
     backgroundImage: `url("${background}")`,
+    transitionDuration: '0.2s',
     // filter: `opacity(${tile.disc ? 1 : 0.7})`,
     backgroundSize: '100%',
     backgroundPosition: '50%',
+    userSelect: 'none',
     // filter: 'drop-shadow(0 0 10px red)',
   };
 
-  const floatingItems = [];
-  const vpBadge = `${tile.vp}`;
-  const exits = tile.exits.map((exit, index) => (
-    <TileExit key={exit.id} isOpen={!!exit} index={index} />
+  const totalVp = tile.items.reduce(
+    (total, item) => total + (item.vp || 0),
+    tile.vp,
+  );
+
+  const exitObjects = tile.exits.map((exit, index) => (
+    <TileExit key={`exit_${index}`} isOpen={!!exit} index={index} />
   ));
-  tile.items.forEach(item => {
-    switch (item.kind) {
-      case 'artefact':
-        vpBadge.concat('*');
-        break;
-      case 'ship':
-        // floatingItems.push(<div>ship</div>);
-        break;
-      default:
-      // nothing
-    }
+
+  const handleClick = () => setHover(!isHover);
+  const handleMouseLeave = () => setHover(false);
+
+  const itemObjects = tile.items.map((item, index) => {
+    const ItemElement = items[item.kind];
+    return (
+      <Positionner
+        zoom={zoom}
+        key={`item_${item.id}`}
+        index={index}
+        count={tile.items.length}
+        distance={ITEMS_DISTANCE}
+      >
+        <ItemElement index={index} item={item} />
+      </Positionner>
+    );
   });
 
+  const planetObjects = tile.planets.map((planet, index) => (
+    <Positionner
+      zoom={zoom}
+      key={`planet_${planet.id}`}
+      index={index}
+      count={tile.planets.length}
+      distance={PLANETS_DISTANCE}
+    >
+      <Planet index={index} planet={planet} />
+    </Positionner>
+  ));
+
+  const shipObjects = tile.ships.map((ship, index) => (
+    <Positionner
+      zoom={zoom}
+      key={`ship_${ship.id}`}
+      index={index}
+      count={tile.ships.length}
+      distance={SHIPS_DISTANCE}
+    >
+      <Ship index={index} ship={ship} />
+    </Positionner>
+  ));
+
   return (
-    <div style={style}>
-      {exits.map(e => e)}
-      {/*{floatingItems.map(f => f)}*/}
+    <div
+      style={style}
+      onClick={handleClick}
+      onMouseLeave={handleMouseLeave}
+    >
+      <VPBadge vp={totalVp} />
+      {exitObjects.map(e => e)}
+      {itemObjects.map(e => e)}
+      {planetObjects.map(e => e)}
+      {shipObjects.map(e => e)}
     </div>
   );
 }

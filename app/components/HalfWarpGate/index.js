@@ -6,8 +6,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import warpImg from '../../images/ecl_half_warp.png';
 import styled from 'styled-components';
+
+import warpImg from '../../images/ecl_half_warp.png';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -19,6 +20,7 @@ function HalfWarpGate(props) {
   return (
     <Wrapper>
       <img
+        draggable="false"
         src={warpImg}
         alt="warp"
         style={{

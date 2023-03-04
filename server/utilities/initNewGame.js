@@ -27,8 +27,8 @@ function initSacks(gameData) {
   gameData.config.players.forEach(p => {
     const shipTypes = [
       { type: 'interceptor', nb: 8 },
-      { type: 'fregate', nb: 4 },
-      { type: 'cruiser', nb: 2 },
+      { type: 'cruiser', nb: 4 },
+      { type: 'dreadnought', nb: 2 },
       { type: 'base', nb: 4 },
       { type: 'monolith', nb: 0 },
       { type: 'orbital', nb: 0 },
