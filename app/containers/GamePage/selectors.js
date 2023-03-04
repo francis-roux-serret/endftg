@@ -11,6 +11,18 @@ const selectGamePageDomain = state => state.gamePage || initialState;
  * Other specific selectors
  */
 
+const makeSelectStatusMessage = () =>
+  createSelector(
+    selectGamePageDomain,
+    substate => substate.statusMessage,
+  );
+
+const makeSelectGameData = () =>
+  createSelector(
+    selectGamePageDomain,
+    substate => substate.gameData,
+  );
+
 /**
  * Default selector used by GamePage
  */
@@ -22,4 +34,4 @@ const makeSelectGamePage = () =>
   );
 
 export default makeSelectGamePage;
-export { selectGamePageDomain };
+export { selectGamePageDomain, makeSelectStatusMessage, makeSelectGameData };

@@ -7,196 +7,72 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectGamePage from './selectors';
+import { makeSelectGameData, makeSelectStatusMessage } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import MapBox from '../../components/MapBox';
+import useSSE from '../../utils/useSSE';
+import { setStatusMessage, storeGameUpdate } from './actions';
 
-export function GamePage() {
+export function GamePage(props) {
   useInjectReducer({ key: 'gamePage', reducer });
   useInjectSaga({ key: 'gamePage', saga });
+  const queryParams = new URLSearchParams(window.location.search)
+  const hash = queryParams.get('hash');
 
-  const tiles = [
-    {
-      x: 0,
-      y: 0,
-      id: '001',
-      label: 'SDCG',
-      ring: 0,
-      color: null,
-      vp: 4,
-      tags: ['center', 'gift', 'artefact', 'workhole'],
-      items: [
-        { kind: 'gift', id: 'gift' },
-        { kind: 'artefact', id: 'artefact' },
-        { kind: 'wormhole', id: 'wormhole', vp: 2 },
-        { kind: 'monolith', id: 'st-1', vp: 3 },
-        { kind: 'orbital', id: 'st-2', hasColon: false },
-      ],
-      ships: [
-        { kind: 'ship', id: 'center', type: 'center', color: null },
-        { kind: 'ship', id: 'guardian', type: 'guardian', color: null },
-        { kind: 'ship', id: 'ancient', type: 'ancient', color: null },
-        { kind: 'ship', id: 'sh-1', type: 'interceptor', color: 'yellow' },
-        { kind: 'ship', id: 'sh-2', type: 'cruiser', color: 'red' },
-        { kind: 'ship', id: 'sh-3', type: 'dreadnought', color: 'black' },
-        { kind: 'ship', id: 'sh-4', type: 'starbase', color: 'white' },
-      ],
-      exits: [1, 0, 1, 1, 0, 0],
-      planets: [
-        { kind: 'planet', id: `001-S-1`, type: 'S', hasColon: false },
-        { kind: 'planet', id: `001-S+-2`, type: 'S+', hasColon: false },
-        { kind: 'planet', id: `001-M-3`, type: 'M', hasColon: false },
-        { kind: 'planet', id: `001-M+-4`, type: 'M+', hasColon: false },
-        { kind: 'planet', id: `001-G-5`, type: 'G', hasColon: false },
-        { kind: 'planet', id: `001-G+-6`, type: 'G+', hasColon: false },
-        { kind: 'planet', id: `001-A-7`, type: 'A', hasColon: false },
-        { kind: 'planet', id: `001-A+-8`, type: 'A+', hasColon: false },
-      ],
-    },
-    {
-      x: 1,
-      y: 1,
-      id: '001',
-      label: 'SDCG',
-      ring: 0,
-      color: null,
-      vp: 4,
-      tags: ['center', 'gift', 'artefact', 'workhole'],
-      items: [
-        { kind: 'gift', id: 'gift' },
-        { kind: 'artefact', id: 'artefact' },
-        { kind: 'wormhole', id: 'wormhole', vp: 2 },
-        { kind: 'monolith', id: 'st-1', vp: 3 },
-        { kind: 'orbital', id: 'st-2', hasColon: false },
-      ],
-      ships: [
-        { kind: 'ship', id: 'center', type: 'center', color: null },
-        { kind: 'ship', id: 'guardian', type: 'guardian', color: null },
-        { kind: 'ship', id: 'ancient', type: 'ancient', color: null },
-        { kind: 'ship', id: 'sh-1', type: 'interceptor', color: 'yellow' },
-        { kind: 'ship', id: 'sh-2', type: 'cruiser', color: 'red' },
-        { kind: 'ship', id: 'sh-3', type: 'dreadnought', color: 'black' },
-        { kind: 'ship', id: 'sh-4', type: 'starbase', color: 'white' },
-      ],
-      exits: [1, 0, 1, 1, 0, 0],
-      planets: [
-        { kind: 'planet', id: `001-S-1`, type: 'S', hasColon: false },
-        { kind: 'planet', id: `001-S+-2`, type: 'S+', hasColon: false },
-        { kind: 'planet', id: `001-M-3`, type: 'M', hasColon: false },
-        { kind: 'planet', id: `001-M+-4`, type: 'M+', hasColon: false },
-        { kind: 'planet', id: `001-G-5`, type: 'G', hasColon: false },
-        { kind: 'planet', id: `001-G+-6`, type: 'G+', hasColon: false },
-        { kind: 'planet', id: `001-A-7`, type: 'A', hasColon: false },
-        { kind: 'planet', id: `001-A+-8`, type: 'A+', hasColon: false },
-      ],
-    },
-    {
-      x: 1,
-      y: -1,
-      id: '001',
-      label: 'SDCG',
-      ring: 0,
-      color: null,
-      vp: 4,
-      tags: ['center', 'gift', 'artefact', 'workhole'],
-      items: [
-        { kind: 'gift', id: 'gift' },
-        { kind: 'artefact', id: 'artefact' },
-        { kind: 'wormhole', id: 'wormhole', vp: 2 },
-        { kind: 'monolith', id: 'st-1', vp: 3 },
-        { kind: 'orbital', id: 'st-2', hasColon: false },
-      ],
-      ships: [
-        { kind: 'ship', id: 'center', type: 'center', color: null },
-        { kind: 'ship', id: 'guardian', type: 'guardian', color: null },
-        { kind: 'ship', id: 'ancient', type: 'ancient', color: null },
-        { kind: 'ship', id: 'sh-1', type: 'interceptor', color: 'yellow' },
-        { kind: 'ship', id: 'sh-2', type: 'cruiser', color: 'red' },
-        { kind: 'ship', id: 'sh-3', type: 'dreadnought', color: 'black' },
-        { kind: 'ship', id: 'sh-4', type: 'starbase', color: 'white' },
-      ],
-      exits: [1, 0, 1, 1, 0, 0],
-      planets: [
-        { kind: 'planet', id: `001-S-1`, type: 'S', hasColon: false },
-        { kind: 'planet', id: `001-S+-2`, type: 'S+', hasColon: false },
-        { kind: 'planet', id: `001-M-3`, type: 'M', hasColon: false },
-        { kind: 'planet', id: `001-M+-4`, type: 'M+', hasColon: false },
-        { kind: 'planet', id: `001-G-5`, type: 'G', hasColon: false },
-        { kind: 'planet', id: `001-G+-6`, type: 'G+', hasColon: false },
-        { kind: 'planet', id: `001-A-7`, type: 'A', hasColon: false },
-        { kind: 'planet', id: `001-A+-8`, type: 'A+', hasColon: false },
-      ],
-    },
-    {
-      x: 0,
-      y: -2,
-      id: '001',
-      label: 'SDCG',
-      ring: 0,
-      color: null,
-      vp: 4,
-      tags: ['center', 'gift', 'artefact', 'workhole'],
-      items: [
-        { kind: 'gift', id: 'gift' },
-        { kind: 'artefact', id: 'artefact' },
-        { kind: 'wormhole', id: 'wormhole', vp: 2 },
-        { kind: 'monolith', id: 'st-1', vp: 3 },
-        { kind: 'orbital', id: 'st-2', hasColon: false },
-      ],
-      ships: [
-        { kind: 'ship', id: 'center', type: 'center', color: null },
-        { kind: 'ship', id: 'guardian', type: 'guardian', color: null },
-        { kind: 'ship', id: 'ancient', type: 'ancient', color: null },
-        { kind: 'ship', id: 'sh-1', type: 'interceptor', color: 'yellow' },
-        { kind: 'ship', id: 'sh-2', type: 'cruiser', color: 'red' },
-        { kind: 'ship', id: 'sh-3', type: 'dreadnought', color: 'black' },
-        { kind: 'ship', id: 'sh-4', type: 'starbase', color: 'white' },
-      ],
-      exits: [1, 0, 1, 1, 0, 0],
-      planets: [
-        { kind: 'planet', id: `001-S-1`, type: 'S', hasColon: false },
-        { kind: 'planet', id: `001-S+-2`, type: 'S+', hasColon: false },
-        { kind: 'planet', id: `001-M-3`, type: 'M', hasColon: false },
-        { kind: 'planet', id: `001-M+-4`, type: 'M+', hasColon: false },
-        { kind: 'planet', id: `001-G-5`, type: 'G', hasColon: false },
-        { kind: 'planet', id: `001-G+-6`, type: 'G+', hasColon: false },
-        { kind: 'planet', id: `001-A-7`, type: 'A', hasColon: false },
-        { kind: 'planet', id: `001-A+-8`, type: 'A+', hasColon: false },
-      ],
-    },
-  ];
+  const handleSSE = message => {
+    switch (message.kind) {
+      case 'gameUpdate': {
+        props.storeGameUpdate(message.gameData);
+        break;
+      }
+      default:
+        console.error(`Unknown SSE kind ${message.kind}`);
+    }
+  };
+
+  useSSE(
+    hash,
+    message => handleSSE(message),
+    () =>
+      props.setStatusMessage('Connection lost to the game, try to refresh.'),
+  );
+
+  const { tiles } = props.gameData.starmap;
+  const playerColors = props.gameData.players.reduce(
+    (a, p) => ({ ...a, [p.id]: p.color }),
+    {},
+  );
 
   return (
     <div>
       <Helmet>
         <title>ENDFTG</title>
-        <meta name='description' content='One game running' />
+        <meta name="description" content="One game running" />
       </Helmet>
       <div>
-        <MapBox tiles={ tiles } />
+        {props.statusMessage ? <div>{props.statusMessage}</div> : null}
+        <MapBox tiles={tiles} playerColors={playerColors} />
       </div>
     </div>
   );
 }
 
 GamePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  statusMessage: PropTypes.string,
+  gameData: PropTypes.object.isRequired,
+  setStatusMessage: PropTypes.func.isRequired,
+  storeGameUpdate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  gamePage: makeSelectGamePage(),
+  statusMessage: makeSelectStatusMessage(),
+  gameData: makeSelectGameData(),
 });
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  { setStatusMessage, storeGameUpdate },
 );
 
 export default compose(withConnect)(GamePage);

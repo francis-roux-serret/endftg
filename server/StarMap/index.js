@@ -64,7 +64,7 @@ class StarMap {
     return {
       kind: 'planet',
       id: `${tileId}-${planetType}-${this.currentPlanetId}`,
-      type: this.currentPlanetId,
+      type: planetType,
       hasColon: false,
     };
   }

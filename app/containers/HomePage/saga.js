@@ -7,7 +7,6 @@ import {
 } from './selectors';
 import { CONNECT_ONE_PLAYER, CREATE_GAME } from './constants';
 import { connectPlayers } from './actions';
-import logger from '../../../server/logger';
 
 const apiPost = (subRoute, postData) => {
   const config = { headers: { Accept: 'application/json' } };
@@ -39,7 +38,7 @@ export function* createGame() {
     );
     yield put(connectPlayers(playersWithConnection));
   } catch (err) {
-    logger.error(err);
+    console.error(err);
   }
 }
 export function* connectOnePlayer({ hash, callback }) {
@@ -47,7 +46,7 @@ export function* connectOnePlayer({ hash, callback }) {
     const { longHash } = yield call(callConnectOnePlayerApi, hash);
     callback(longHash);
   } catch (err) {
-    logger.error(err);
+    console.error(err);
   }
 }
 

@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
 const StarMap = require('../StarMap');
 const ItemSacks = require('../ItemSacks');
@@ -20,15 +20,17 @@ class Store {
     }
 
     try {
+      logger.debug('Loading store from disk');
       /** @var {string} jsonData */
-      const jsonData = await fs.readFile(SAVE_PATH_NAME, {
+      const jsonData = await fs.promises.readFile(SAVE_PATH_NAME, {
         encoding: 'utf8',
       });
 
       const data = JSON.parse(jsonData);
+      logger.debug(`Loading ${data.length} games into store.`);
       data.forEach(serializedGame => {
         const itemSacks = new ItemSacks();
-        itemSacks.deserialize(data.itemSacks);
+        itemSacks.deserialize(serializedGame.itemSacks);
 
         const starmap = new StarMap(itemSacks);
         starmap.deserialize(serializedGame.starmap);
@@ -37,14 +39,15 @@ class Store {
         technoBoard.deserialize(serializedGame.technoBoard);
 
         self.games.push({
-          gameId: data.gameId,
+          gameId: serializedGame.gameId,
           itemSacks,
           starmap,
           technoBoard,
-          alliances: data.alliances,
-          players: data.players,
+          alliances: serializedGame.alliances,
+          players: serializedGame.players,
         });
       });
+      logger.info(`Loaded ${data.length} games into store.`);
     } catch (err) {
       console.error('Error reading save', err);
     }
@@ -71,7 +74,8 @@ class Store {
 
   async checkIfFileExists() {
     try {
-      await fs.access(SAVE_PATH_NAME, fs.constants.W_OK);
+      // eslint-disable-next-line no-bitwise
+      fs.promises.access(SAVE_PATH_NAME, fs.constants.R_OK | fs.constants.W_OK);
 
       return true;
     } catch (err) {

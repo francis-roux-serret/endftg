@@ -7,6 +7,7 @@ const store = require('./store');
 const argv = require('./argv');
 const port = require('./port');
 const api = require('./api');
+const sse = require('./sse');
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
@@ -18,7 +19,8 @@ const app = express();
 app.use(express.json());
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
-app.use('/api', api);
+app.use('/sse', sse); // SSE
+app.use('/api', api); // API
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
@@ -37,8 +39,6 @@ app.get('*.js', (req, res, next) => {
   res.set('Content-Encoding', 'gzip');
   next();
 });
-
-logger.info('Loading games from save...');
 
 store
   .loadFromDisk()

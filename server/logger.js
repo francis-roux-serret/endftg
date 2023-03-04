@@ -15,11 +15,11 @@ const logger = {
   },
 
   warn: msg => {
-    console.warn(msg);
+    console.warn(chalk.yellow(msg));
   },
 
   debug: msg => {
-    console.debug(msg);
+    console.debug(chalk.magenta(msg));
   },
 
   info: msg => {

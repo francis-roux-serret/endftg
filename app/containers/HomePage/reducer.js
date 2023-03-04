@@ -1,4 +1,4 @@
-import { CONNECT_PLAYERS, CREATE_GAME, SAVE_GAME_SETTINGS } from './constants';
+import { CONNECT_PLAYERS, SAVE_GAME_SETTINGS } from './constants';
 import colors from './colors';
 
 export const initialState = {

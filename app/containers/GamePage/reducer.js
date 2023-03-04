@@ -4,34 +4,42 @@
  *
  */
 import produce from 'immer';
-import { LOAD_GAME } from './constants';
+import { STORE_GAME_UPDATE, SET_STATUS_MESSAGE } from './constants';
 
 export const initialState = {
-  config: {
-    players: [],
-    modules: ['root'],
-  },
+  statusMessage: null,
   log: [],
   history: [],
   tchat: [],
-  status: {
-    npcConfig: {
-      ancient: null,
-      guardian: null,
-      center: null,
+  gameData: {
+    config: {
+      players: [],
+      npcConfig: {
+        ancient: null,
+        guardian: null,
+        center: null,
+      },
+      modules: ['root'],
     },
-    round: 0,
+    status: {
+      round: 0,
+      phase: 'move',
+    },
+    starmap: { tiles: [], connections: [] },
     players: [],
-    starmap: [],
-    market: [],
+    technoBoard: [],
   },
 };
 
 /* eslint-disable default-case, no-param-reassign */
 const gamePageReducer = (state = initialState, action) =>
-  produce(state, (/* draft */) => {
+  produce(state, draft => {
     switch (action.type) {
-      case LOAD_GAME:
+      case SET_STATUS_MESSAGE:
+        draft.statusMessage = action.data.statusMessage;
+        break;
+      case STORE_GAME_UPDATE:
+        draft.gameData = action.data.gameData;
         break;
     }
   });

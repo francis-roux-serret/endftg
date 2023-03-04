@@ -21,13 +21,14 @@ const Wrapper = styled.div`
   position: relative;
   background-image: url(${imgGalaxy});
   background-position: center;
-  background-repeat: round;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
-function MapBox(props) {
+function MapBox({ tiles, playerColors }) {
   return (
     <Wrapper>
-      {props.tiles.map(tile => (
-        <Tile key={tile.id} tile={tile} />
+      {tiles.map(tile => (
+        <Tile key={tile.id} playerColors={playerColors} tile={tile} />
       ))}
     </Wrapper>
   );
@@ -35,6 +36,7 @@ function MapBox(props) {
 
 MapBox.propTypes = {
   tiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  playerColors: PropTypes.object.isRequired,
 };
 
 MapBox.propTypes = {};

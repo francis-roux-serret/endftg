@@ -17,10 +17,10 @@ import Positionner from './Positionner';
 import Planet from './Planet';
 import VPBadge from './VPBadge';
 
-function Tile(props) {
+function Tile({ tile, playerColors }) {
   const [isHover, setHover] = useState(false);
-  const { tile } = props;
-  const background = BACKGROUNDS[tile.disc || 'empty'];
+  const color = playerColors[tile.owner || 0];
+  const background = BACKGROUNDS[color || 'empty'];
   const zoom = isHover ? 1 : UNZOOM;
   const style = {
     overflow: 'show',
@@ -95,11 +95,7 @@ function Tile(props) {
   ));
 
   return (
-    <div
-      style={style}
-      onClick={handleClick}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div style={style} onClick={handleClick} onMouseLeave={handleMouseLeave}>
       <VPBadge vp={totalVp} />
       {exitObjects.map(e => e)}
       {itemObjects.map(e => e)}
@@ -111,6 +107,7 @@ function Tile(props) {
 
 Tile.propTypes = {
   tile: PropTypes.object.isRequired,
+  playerColors: PropTypes.object.isRequired,
 };
 
 export default Tile;
