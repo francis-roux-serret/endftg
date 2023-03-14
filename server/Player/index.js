@@ -26,6 +26,9 @@ class Player {
       const techno = technos.find(t => t.id === technoName);
       self.addTechno(techno);
     });
+    this.initialShips = raceConfig.initialShips.map(
+      shipName => `${self.color}-${shipName}`,
+    );
   }
 
   serialize() {
@@ -49,6 +52,10 @@ class Player {
     this.race = data.race;
     this.color = data.color;
     this.playerTechnos.deserialize(data.playerTechnos);
+  }
+
+  getInitialShipsSackNames() {
+    return this.initialShips;
   }
 
   hasTechno(t) {

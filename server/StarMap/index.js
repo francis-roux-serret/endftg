@@ -48,6 +48,22 @@ class StarMap {
     return this.tiles.find(t => t.x === x && t.y === y);
   }
 
+  addShip(tileId, ship) {
+    const tile = this.tiles.find(t => t.id === tileId);
+    if (!tile) {
+      throw new Error(`Tile ${tileId} is not on map`);
+    }
+    tile.ships.push(ship);
+  }
+
+  removeShip(ship) {
+    const tile = this.tiles.find(t => t.ships.find(s => s.id === ship.id));
+    if (!tile) {
+      throw new Error(`Ship ${ship.id} is not on map`);
+    }
+    tile.ships = tile.ships.filter(s => s.id !== ship.id);
+  }
+
   getFreeColonisablePlaces(playerId, colonisablePlanetTypes) {
     const result = [];
     this.tiles

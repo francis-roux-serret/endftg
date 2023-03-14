@@ -155,11 +155,14 @@ function initGame(gameData) {
   const countBasedConfig = playerCountConfig[gameData.players.length];
 
   gameData.players.forEach((player, index) => {
-    const { x, y, rotation } = countBasedConfig.positions[index];
+    // Pick home
     const tileId = player.pickHomeSectorId();
     const tile = gameData.itemSacks.pickWithId('homeTile', tileId);
+    // Place it on map
+    const { x, y, rotation } = countBasedConfig.positions[index];
     const mapTile = gameData.starmap.addTile(x, y, rotation, tile);
     mapTile.owner = index + 1;
+    // Colonise colonisable places
     const colonisablePlanetTypes = player.getColonisablePlanetTypes();
     const freePlaces = gameData.starmap.getFreeColonisablePlaces(
       player.id,
@@ -175,6 +178,11 @@ function initGame(gameData) {
           true,
         );
       }
+    });
+    // Add starting ship(s)
+    player.getInitialShipsSackNames().forEach(sackName => {
+      const ship = gameData.itemSacks.pickOne(sackName);
+      gameData.starmap.addShip(tileId, ship);
     });
   });
 
