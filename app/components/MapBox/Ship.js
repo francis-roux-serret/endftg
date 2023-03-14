@@ -61,7 +61,9 @@ const mapping = {
 
 function Ship({ ship }) {
   const { type, color } = ship;
-  const realColor = color ? color.charAt(0).toUpperCase() + color.slice(1) : 'Gray';
+  const realColor = color
+    ? color.charAt(0).toUpperCase() + color.slice(1)
+    : 'Gray';
   const name = `${type}${realColor}`;
 
   return (

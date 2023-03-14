@@ -19,7 +19,7 @@ module.exports = [
     count: 5,
   },
   {
-    id: 'can_1',
+    id: 'can_2',
     group: 'root',
     color: 'red',
     price: 6,
@@ -145,7 +145,7 @@ module.exports = [
     pow: 0,
     count: 3,
   },
-  // yellowlow
+  // yellow
   {
     id: 'build',
     group: 'root',

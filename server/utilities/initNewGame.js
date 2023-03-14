@@ -3,18 +3,16 @@ const crypto = require('crypto');
 const store = require('../store');
 const StarMap = require('../StarMap');
 const TechnoBaord = require('../TechnoBoard');
-const randomPick = require('./randomPick');
 
 const playerCountConfig = require('../reference/playerCountConfig');
-const species = require('../reference/species');
 const technos = require('../reference/technos');
 const gifts = require('../reference/gifts');
 const tiles = require('../reference/tiles');
 const ItemSacks = require('../ItemSacks');
-
-function createShip(color, race, type) {
-  return { kind: 'ship', color, race, type };
-}
+const PopulationTrack = require('../PopulationTrack');
+const createShip = require('./createShip');
+const Player = require('../Player');
+const createItem = require('./createItem');
 
 function createBadge(vp) {
   return { kind: 'badge', vp };
@@ -30,8 +28,6 @@ function initSacks(gameData) {
       { type: 'cruiser', nb: 4 },
       { type: 'dreadnought', nb: 2 },
       { type: 'base', nb: 4 },
-      { type: 'monolith', nb: 0 },
-      { type: 'orbital', nb: 0 },
     ];
     shipTypes.forEach(({ type, nb }) => {
       const sackName = `${p.color}-${type}`;
@@ -52,14 +48,23 @@ function initSacks(gameData) {
   });
 
   // NPCs sacks
-  gameData.itemSacks.createSack('ancient', false, false);
-  gameData.itemSacks.addOne('ancient', { kind: 'ancient' });
-  gameData.itemSacks.createSack('guardian', false, false);
-  gameData.itemSacks.addOne('ancient', { kind: 'guardian' });
-  gameData.itemSacks.createSack('center', false, false);
-  gameData.itemSacks.addOne('center', { kind: 'center' });
-  gameData.itemSacks.createSack('artefact', false, false);
-  gameData.itemSacks.addOne('artefact', { kind: 'artefact' });
+  ['ancient', 'guardian', 'center'].forEach(type => {
+    gameData.itemSacks.createSack(type, false, false);
+    gameData.itemSacks.addOne(type, createShip('gray', 'npc', type));
+  });
+
+  // Items sacks
+  ['artefact', 'monolith', 'orbital'].forEach(type => {
+    gameData.itemSacks.createSack(type, false, false);
+    gameData.itemSacks.addOne(type, createItem(type));
+  });
+
+  // Population tracks
+  gameData.populationTracks = {
+    S: new PopulationTrack('S'),
+    M: new PopulationTrack('M'),
+    G: new PopulationTrack('G'),
+  };
 
   // Modules specific sacks
   gameData.config.modules.push('root');
@@ -88,13 +93,23 @@ function initSacks(gameData) {
       }
     });
 
-  // Tiles sacks
+  // home sacks
   gameData.itemSacks.createSack('homeTile', true, true);
   tiles
     .filter(t => t.group === 'home')
     .forEach(t => {
       gameData.itemSacks.addOne('homeTile', t);
     });
+
+  // guardian tiles sacks
+  gameData.itemSacks.createSack('guardianTile', true, true);
+  tiles
+    .filter(t => t.group === 'guardian')
+    .forEach(t => {
+      gameData.itemSacks.addOne('guardianTile', t);
+    });
+
+  // Game tile sacks
   for (let i = 0; i <= 3; i += 1) {
     const ringSackName = `ring${i}`;
     gameData.itemSacks.createSack(ringSackName, true, true);
@@ -110,7 +125,7 @@ function initSacks(gameData) {
 }
 
 function createPlayersHashes(gameData) {
-  gameData.players = gameData.players.map(player => {
+  gameData.players.forEach(player => {
     let longHash = null;
     let hash = null;
     let exists = true;
@@ -127,32 +142,51 @@ function createPlayersHashes(gameData) {
     }
     if (exists) throw new Error('Server is full');
 
-    return {
-      ...player,
-      longHash,
-      hash,
-    };
+    player.setHashes(hash, longHash);
   });
 }
 
 function initGame(gameData) {
+  gameData.players = gameData.config.players.map(
+    (p, index) => new Player(p, index),
+  );
   const centerTileTemplate = gameData.itemSacks.pickOne('ring0');
   gameData.starmap.addTile(0, 0, 0, centerTileTemplate);
-  const playerTemplate = species.find(s => s.id === 'human');
-  const sectors = [...playerTemplate.sectors];
+  const countBasedConfig = playerCountConfig[gameData.players.length];
 
-  const countBasedConfig = playerCountConfig[gameData.config.players.length];
-  countBasedConfig.positions.forEach(({ x, y }, index) => {
-    const tileId = randomPick(sectors, 1, true)[0];
+  gameData.players.forEach((player, index) => {
+    const { x, y, rotation } = countBasedConfig.positions[index];
+    const tileId = player.pickHomeSectorId();
     const tile = gameData.itemSacks.pickWithId('homeTile', tileId);
-    gameData.starmap.addTile(x, y, index, tile);
+    const mapTile = gameData.starmap.addTile(x, y, rotation, tile);
+    mapTile.owner = index + 1;
+    const colonisablePlanetTypes = player.getColonisablePlanetTypes();
+    const freePlaces = gameData.starmap.getFreeColonisablePlaces(
+      player.id,
+      colonisablePlanetTypes,
+    );
+    freePlaces.forEach(place => {
+      const planetType = place.accept[0];
+      if (player.removeCube(planetType)) {
+        gameData.starmap.setTileObjectPopulation(
+          place.tileId,
+          place.kind,
+          place.id,
+          true,
+        );
+      }
+    });
+  });
+
+  countBasedConfig.guardians.forEach(({ x, y, rotation }) => {
+    const tile = gameData.itemSacks.pickOne('guardianTile');
+    gameData.starmap.addTile(x, y, rotation, tile);
   });
 
   gameData.alliances = countBasedConfig.alliances;
   gameData.nbPick = countBasedConfig.nbPick;
   gameData.technoBoard.pickNewTechnos(countBasedConfig.nbTechnos);
   gameData.itemSacks.shrinkSack('ring3', countBasedConfig.nbSector3);
-  gameData.players = [...gameData.config.players];
 }
 
 function initNewGame(config) {

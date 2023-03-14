@@ -33,6 +33,7 @@ class ItemSack {
         type: this.type,
       };
     }
+
     if (this.random) {
       return randomPick(this.sack, 1, true)[0];
     }

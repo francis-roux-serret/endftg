@@ -1,11 +1,18 @@
 const mapItemsMapping = {
-  center: ['center', 'gift'],
-  guardian: ['guardian', 'gift'],
-  double: ['ancient', 'ancient', 'gift'],
-  ancient: ['ancient', 'gift'],
+  center: ['gift'],
+  guardian: ['gift'],
+  double: ['gift'],
+  ancient: ['gift'],
   wormhole: ['wormhole'],
   gift: ['gift'],
   artefact: ['artefact'],
+};
+
+const mapShipsMapping = {
+  center: ['center'],
+  guardian: ['guardian'],
+  double: ['ancient', 'ancient'],
+  ancient: ['ancient'],
 };
 
 class StarMap {
@@ -41,6 +48,57 @@ class StarMap {
     return this.tiles.find(t => t.x === x && t.y === y);
   }
 
+  getFreeColonisablePlaces(playerId, colonisablePlanetTypes) {
+    const result = [];
+    this.tiles
+      .filter(t => t.owner === playerId)
+      .forEach(tile => {
+        // Scan planet
+        tile.planets
+          .filter(p => !p.hasColon)
+          .forEach(planet => {
+            const cpt = colonisablePlanetTypes.find(
+              t => t.type === planet.type && t.nbMax > 0,
+            );
+
+            if (cpt) {
+              result.push({ tileId: tile.id, accept: cpt.accept, ...planet });
+            }
+          });
+
+        // colonisable items ?
+        tile.items
+          .filter(i => i.hasColon === false)
+          .forEach(item => {
+            const cpt = colonisablePlanetTypes.find(t => t.type === item.type);
+            if (cpt) {
+              result.push({ tileId: tile.id, accept: cpt.accept, ...item });
+            }
+          });
+      });
+    return result;
+  }
+
+  setTileObjectPopulation(tileId, kind, objectId, hasColon) {
+    const tile = this.tiles.find(t => t.id === tileId);
+    if (!tile) {
+      throw Error(`Tile ${tileId} not found`);
+    }
+    if (kind === 'planet') {
+      const planet = tile.planets.find(p => p.id === objectId);
+      if (!planet) {
+        throw Error(`Planet ${objectId} not found on tile ${tileId}`);
+      }
+      planet.hasColon = hasColon;
+    } else {
+      const item = tile.items.find(i => i.id === objectId);
+      if (!item) {
+        throw Error(`Item ${objectId} not found on tile ${tileId}`);
+      }
+      item.hasColon = hasColon;
+    }
+  }
+
   storeTile(tile) {
     this.tiles = [
       ...this.tiles.filter(t => t.x !== tile.x || t.y !== tile.y),
@@ -48,14 +106,14 @@ class StarMap {
     ];
   }
 
-  handleRotation(exits, rotation) {
-    const result = { exits };
+  generateRotatedExits(tileTemplate, rotation) {
+    const exits = [...tileTemplate.exits];
     for (let i = 0; i < rotation; i += 1) {
-      const shiftedOne = result.exits.pop();
-      result.exits.unshift(shiftedOne);
+      const shiftedOne = exits.pop();
+      exits.unshift(shiftedOne);
     }
 
-    return result;
+    return { exits };
   }
 
   generatePlanet(tileId, planetType) {
@@ -95,8 +153,26 @@ class StarMap {
         items.push(self.itemSacks.pickOne(itemName));
       });
     });
+    if (tileTemplate.items) {
+      tileTemplate.items.forEach(itemName => {
+        items.push(self.itemSacks.pickOne(itemName));
+      });
+    }
 
     return { items };
+  }
+
+  generateShips(tileTemplate) {
+    const self = this;
+    const ships = [];
+    tileTemplate.tags.forEach(tag => {
+      const shipList = mapShipsMapping[tag] || [];
+      shipList.forEach(shipType => {
+        ships.push(self.itemSacks.pickOne(shipType));
+      });
+    });
+
+    return { ships };
   }
 
   recomputeConnections() {
@@ -163,26 +239,26 @@ class StarMap {
   }
 
   getData() {
-    return this.tiles.map(t => {
-      console.log(t);
-
-      return t;
-    });
+    return this.tiles.map(t => t);
   }
 
   addTile(x, y, rotation, tileTemplate) {
     const tilePosition = this.createTile(x, y);
     const tileData = this.generateTile(tileTemplate);
-    const tileRotation = this.handleRotation(tileTemplate.exits, rotation);
+    const tileExits = this.generateRotatedExits(tileTemplate, rotation);
     const tileItems = this.generateItems(tileTemplate);
+    const tileShips = this.generateShips(tileTemplate);
     const tile = {
       ...tileData,
       ...tilePosition,
-      ...tileRotation,
+      ...tileExits,
       ...tileItems,
+      ...tileShips,
     };
     this.storeTile(tile);
     this.recomputeConnections();
+
+    return tile;
   }
 }
 

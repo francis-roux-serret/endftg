@@ -10,8 +10,9 @@ import {
   TILE_W,
   UNZOOM,
 } from './constants';
-import TileExit from './TileExit';
 import items from './items';
+
+import TileExit from './TileExit';
 import Ship from './Ship';
 import Positionner from './Positionner';
 import Planet from './Planet';
@@ -49,6 +50,7 @@ function Tile({ tile, playerColors }) {
   );
 
   const exitObjects = tile.exits.map((exit, index) => (
+    // eslint-disable-next-line react/no-array-index-key
     <TileExit key={`exit_${index}`} isOpen={!!exit} index={index} />
   ));
 
@@ -56,7 +58,12 @@ function Tile({ tile, playerColors }) {
   const handleMouseLeave = () => setHover(false);
 
   const itemObjects = tile.items.map((item, index) => {
-    const ItemElement = items[item.kind];
+    const ItemElement = items[item.type];
+    const element = ItemElement ? (
+      <ItemElement index={index} item={item} />
+    ) : (
+      <h2>{item.type}</h2>
+    );
     return (
       <Positionner
         zoom={zoom}
@@ -65,7 +72,7 @@ function Tile({ tile, playerColors }) {
         count={tile.items.length}
         distance={ITEMS_DISTANCE}
       >
-        <ItemElement index={index} item={item} />
+        {element}
       </Positionner>
     );
   });
@@ -95,6 +102,7 @@ function Tile({ tile, playerColors }) {
   ));
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div style={style} onClick={handleClick} onMouseLeave={handleMouseLeave}>
       <VPBadge vp={totalVp} />
       {exitObjects.map(e => e)}
