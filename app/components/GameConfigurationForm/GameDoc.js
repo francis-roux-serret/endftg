@@ -45,7 +45,7 @@ function GameDoc() {
             Play Orion Hegemony if you want to play aggressive from start.
             <br />
             You will have the strongest fleet at the sart of game, and start
-            with a dreadnought where other players have only an interceptor.
+            with a cruiser where other players have only an interceptor.
             <br />
             You have an extra victory point slot, but lack one alliance
             slot.
@@ -88,7 +88,7 @@ function GameDoc() {
             You start with advanced science production and can research 2
             technologies at once.
             <br />
-            You weak point is that but have very low mineral production at
+            You weak point is that you have very low mineral production at
             the start.
             <br />
             You will have to adapt at the available technologies to
@@ -104,7 +104,7 @@ function GameDoc() {
         <li>
           <strong>Draco (yellow)</strong>
           <p>
-            Play Draco if you feel like a protecting the NPCs.
+            Play Draco if you feel like protecting the NPCs.
             <br />
             You will be able to use the ancient NPC production planets and
             claim their sector without fighting them.
