@@ -1,37 +1,43 @@
 const DEFAULT_INCOMES = [2, 3, 4, 6, 8, 10, 12, 15, 18, 21, 24, 28];
 
 class PopulationTrack {
-  constructor(type, alternativeIncomes = null) {
+  constructor({ type, initialCount, alternativeIncomes }) {
     this.type = type;
     this.cemetaryCount = 0;
+    this.currentCount = initialCount;
     const incomes = alternativeIncomes || DEFAULT_INCOMES;
 
     this.populations = incomes.map((i, index) => ({
       index,
       income: i,
-      present: true,
+      present: index > 0,
     }));
   }
 
   serialize() {
     return {
       type: this.type,
+      currentCount: this.currentCount,
       cemetaryCount: this.cemetaryCount,
       populations: this.populations,
     };
   }
 
   deserialize(data) {
-    this.sacks = data.sacks;
+    this.type = data.type;
+    this.currentCount = data.currentCount;
+    this.cemetaryCount = data.cemetaryCount;
+    this.populations = data.populations;
   }
 
-  toPost() {
+  export() {
     return {
       type: this.type,
       empty: this.countEmptySpace(),
       available: this.countAvailable(),
-      cemetary: this.cemetaryCount,
-      populations: JSON.parse(JSON.stringify(this.populations)),
+      cemetaryCount: this.cemetaryCount,
+      currentCount: this.currentCount,
+      populations: this.populations,
     };
   }
 
@@ -71,6 +77,10 @@ class PopulationTrack {
     this.checkEmptySpace();
     const firstEmptySpace = this.populations.find(p => !p.present);
     this.populations[firstEmptySpace.index].present = true;
+  }
+
+  getType() {
+    return this.type;
   }
 
   addOneToCemetary() {

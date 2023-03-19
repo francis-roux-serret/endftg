@@ -13,11 +13,12 @@ import saga from './saga';
 import MapBox from '../../components/MapBox';
 import useSSE from '../../utils/useSSE';
 import { setStatusMessage, storeGameUpdate } from './actions';
+import ControlBoard from '../../components/ControlBoard';
 
 export function GamePage(props) {
   useInjectReducer({ key: 'gamePage', reducer });
   useInjectSaga({ key: 'gamePage', saga });
-  const queryParams = new URLSearchParams(window.location.search)
+  const queryParams = new URLSearchParams(window.location.search);
   const hash = queryParams.get('hash');
 
   const handleSSE = message => {
@@ -50,9 +51,10 @@ export function GamePage(props) {
         <title>ENDFTG</title>
         <meta name="description" content="One game running" />
       </Helmet>
-      <div>
+      <div style={{ display: 'flex', direction: 'row' }}>
         {props.statusMessage ? <div>{props.statusMessage}</div> : null}
         <MapBox tiles={tiles} playerColors={playerColors} />
+        <ControlBoard gameData={props.gameData} />
       </div>
     </div>
   );

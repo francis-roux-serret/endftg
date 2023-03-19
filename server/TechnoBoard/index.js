@@ -28,7 +28,7 @@ class TechnoBoard {
 
   serialize() {
     return {
-      trees: this.trees
+      trees: this.trees,
     };
   }
 
@@ -60,7 +60,7 @@ class TechnoBoard {
     }
   }
 
-  toPost() {
+  export() {
     return this.trees.map(tree => ({
       color: tree.color,
       tiles: tree.tiles.map(tile => ({

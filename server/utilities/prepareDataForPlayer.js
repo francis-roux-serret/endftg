@@ -1,13 +1,17 @@
-function exportPlayer(playerData, isCurrent) {
+function exportPlayer(player, index, isConnected) {
   return {
-    ...playerData,
-    hasPassed: false, // TODO: Change this
-    isCurrent, // TODO: change this
+    ...player.export(),
+    isConnected,
+    // TODO: Change the following
+    hasPassed: false,
+    order: index + 1,
+    traitor: false,
+    firstPlayer: false,
   };
 }
 
 function prepareDataForPlayer(gameData, playerId) {
-  return {
+  const preparedData = {
     config: {
       ...gameData.config,
       alliances: gameData.alliances,
@@ -15,6 +19,7 @@ function prepareDataForPlayer(gameData, playerId) {
     status: {
       round: 1,
       phase: 'move',
+      turn: 1,
     },
     starmap: {
       tiles: gameData.starmap.tiles.map(tile => ({
@@ -26,11 +31,14 @@ function prepareDataForPlayer(gameData, playerId) {
       })),
       connections: gameData.starmap.connections,
     },
-    players: gameData.players.map(player =>
-      exportPlayer(player, player.id === playerId),
+    players: gameData.players.map((player, index) =>
+      exportPlayer(player, index, player.id === playerId),
     ),
     technoBoard: gameData.technoBoard.trees,
   };
+
+  console.log(preparedData);
+  return preparedData;
 }
 
 module.exports = prepareDataForPlayer;

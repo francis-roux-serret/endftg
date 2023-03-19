@@ -9,7 +9,6 @@ const technos = require('../reference/technos');
 const gifts = require('../reference/gifts');
 const tiles = require('../reference/tiles');
 const ItemSacks = require('../ItemSacks');
-const PopulationTrack = require('../PopulationTrack');
 const createShip = require('./createShip');
 const Player = require('../Player');
 const createItem = require('./createItem');
@@ -58,13 +57,6 @@ function initSacks(gameData) {
     gameData.itemSacks.createSack(type, false, false);
     gameData.itemSacks.addOne(type, createItem(type));
   });
-
-  // Population tracks
-  gameData.populationTracks = {
-    S: new PopulationTrack('S'),
-    M: new PopulationTrack('M'),
-    G: new PopulationTrack('G'),
-  };
 
   // Modules specific sacks
   gameData.config.modules.push('root');
@@ -147,9 +139,12 @@ function createPlayersHashes(gameData) {
 }
 
 function initGame(gameData) {
-  gameData.players = gameData.config.players.map(
-    (p, index) => new Player(p, index),
-  );
+  gameData.players = gameData.config.players.map((config, index) => {
+    const player = new Player(index);
+    player.importConfig(config);
+
+    return player;
+  });
   const centerTileTemplate = gameData.itemSacks.pickOne('ring0');
   gameData.starmap.addTile(0, 0, 0, centerTileTemplate);
   const countBasedConfig = playerCountConfig[gameData.players.length];
@@ -158,10 +153,15 @@ function initGame(gameData) {
     // Pick home
     const tileId = player.pickHomeSectorId();
     const tile = gameData.itemSacks.pickWithId('homeTile', tileId);
+
     // Place it on map
     const { x, y, rotation } = countBasedConfig.positions[index];
     const mapTile = gameData.starmap.addTile(x, y, rotation, tile);
     mapTile.owner = index + 1;
+
+    // Use disc
+    player.pickOneDisc();
+
     // Colonise colonisable places
     const colonisablePlanetTypes = player.getColonisablePlanetTypes();
     const freePlaces = gameData.starmap.getFreeColonisablePlaces(
@@ -179,6 +179,7 @@ function initGame(gameData) {
         );
       }
     });
+
     // Add starting ship(s)
     player.getInitialShipsSackNames().forEach(sackName => {
       const ship = gameData.itemSacks.pickOne(sackName);

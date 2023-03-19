@@ -4,7 +4,7 @@ const StarMap = require('../StarMap');
 const ItemSacks = require('../ItemSacks');
 const TechnoBoard = require('../TechnoBoard');
 const logger = require('../logger');
-const PopulationTrack = require('../PopulationTrack');
+const Player = require('../Player');
 
 const SAVE_PATH_NAME = 'data/store.json';
 
@@ -39,27 +39,18 @@ class Store {
         const technoBoard = new TechnoBoard(itemSacks);
         technoBoard.deserialize(serializedGame.technoBoard);
 
-        const populationTracks = {};
-        Object.keys(serializedGame.populationTracks).forEach(key => {
-          populationTracks[key] = new PopulationTrack(key);
-          populationTracks[key].deserialize(
-            serializedGame.populationTracks[key],
-          );
-        });
-
         self.games.push({
           gameId: serializedGame.gameId,
           itemSacks,
           starmap,
           technoBoard,
-          populationTracks,
           alliances: serializedGame.alliances,
           players: self.deserializePlayers(serializedGame.players),
         });
       });
       logger.info(`Loaded ${data.length} games into store.`);
     } catch (err) {
-      logger.error('Error reading save', err);
+      logger.error(`Error reading save ${err}`);
     }
   }
 
@@ -68,27 +59,24 @@ class Store {
   }
 
   deserializePlayers(rawPlayers) {
-    return rawPlayers;
+    return rawPlayers.map(rawData => {
+      const player = new Player(rawData.index);
+      player.deserialize(rawData);
+
+      return player;
+    });
   }
 
   saveToDisk() {
     try {
-      const data = this.games.map(game => {
-        const populationTracks = {};
-        Object.keys(game.populationTracks || {}).forEach(key => {
-          populationTracks[key] = game.populationTracks[key].serialize();
-        });
-
-        return {
-          gameId: game.gameId,
-          itemSacks: game.itemSacks && game.itemSacks.serialize(),
-          starmap: game.starmap && game.starmap.serialize(),
-          technoBoard: game.technoBoard && game.technoBoard.serialize(),
-          populationTracks,
-          alliances: game.alliances,
-          players: this.serializePlayers(game.players),
-        };
-      });
+      const data = this.games.map(game => ({
+        gameId: game.gameId,
+        itemSacks: game.itemSacks && game.itemSacks.serialize(),
+        starmap: game.starmap && game.starmap.serialize(),
+        technoBoard: game.technoBoard && game.technoBoard.serialize(),
+        alliances: game.alliances,
+        players: this.serializePlayers(game.players),
+      }));
 
       return fs.promises.writeFile(SAVE_PATH_NAME, JSON.stringify(data));
     } catch (err) {
@@ -159,7 +147,7 @@ class Store {
   findGameAndPlayerForLongHash(longHash) {
     let returnValue = [null, null];
     this.games.some(game => {
-      const foundPlayer = game.players.find(p => p.longHash === longHash);
+      const foundPlayer = game.players.find(p => p.checkLongHash(longHash));
       if (foundPlayer) {
         returnValue = [game, foundPlayer];
 

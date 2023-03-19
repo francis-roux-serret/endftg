@@ -11,7 +11,16 @@ import Tile from './Tile';
 import { BOARD_H, BOARD_W } from './constants';
 import imgGalaxy from '../../images/ecl_galaxy.png';
 
-const Wrapper = styled.div`
+const OutsideWrapper = styled.div`
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: auto;
+  width: auto;
+  height: 100vh;
+`;
+
+const InsideWrapper = styled.div`
   background-color: #003;
   padding: 0;
   margin: 0;
@@ -26,11 +35,13 @@ const Wrapper = styled.div`
 `;
 function MapBox({ tiles, playerColors }) {
   return (
-    <Wrapper>
-      {tiles.map(tile => (
-        <Tile key={tile.id} playerColors={playerColors} tile={tile} />
-      ))}
-    </Wrapper>
+    <OutsideWrapper>
+      <InsideWrapper>
+        {tiles.map(tile => (
+          <Tile key={tile.id} playerColors={playerColors} tile={tile} />
+        ))}
+      </InsideWrapper>
+    </OutsideWrapper>
   );
 }
 

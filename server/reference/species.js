@@ -3,9 +3,11 @@ module.exports = [
     id: 'human',
     tradeRate: 2,
     discs: 13,
-    initialS: 3,
-    initialM: 4,
-    initialG: 3,
+    initialResources: [
+      { type: 'S', initialCount: 3, alternativeIncomes: null },
+      { type: 'M', initialCount: 4, alternativeIncomes: null },
+      { type: 'G', initialCount: 3, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['221', '223', '225', '227', '229', '231'],
     emplacements: ['alliance', 'twin', 'twin', 'twin', 'twin'],
@@ -23,7 +25,7 @@ module.exports = [
     tags: [], // ['chooseTile', 'fragilePop', 'ancientFriend']
     activeActions: { exp: 1, dev: 1, ame: 2, con: 2, dep: 3, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -82,9 +84,11 @@ module.exports = [
     color: 'red',
     tradeRate: 3,
     discs: 11,
-    initialS: 2,
-    initialM: 4,
-    initialG: 26,
+    initialResources: [
+      { type: 'S', initialCount: 2, alternativeIncomes: null },
+      { type: 'M', initialCount: 4, alternativeIncomes: null },
+      { type: 'G', initialCount: 26, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['222'],
     emplacements: ['twin', 'twin', 'twin', 'twin'],
@@ -102,7 +106,7 @@ module.exports = [
     tags: [],
     activeActions: { exp: 1, dev: 1, ame: 2, con: 2, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -161,9 +165,11 @@ module.exports = [
     color: 'green',
     tradeRate: 3,
     discs: 13,
-    initialS: 3,
-    initialM: 4,
-    initialG: 2,
+    initialResources: [
+      { type: 'S', initialCount: 3, alternativeIncomes: null },
+      { type: 'M', initialCount: 4, alternativeIncomes: null },
+      { type: 'G', initialCount: 2, alternativeIncomes: null },
+    ],
     colons: 4,
     sectors: ['226'],
     emplacements: ['alliance', 'twin', 'twin', 'twin'],
@@ -181,7 +187,7 @@ module.exports = [
     tags: ['fragilePop', 'scoreForTiles'],
     activeActions: { exp: 2, dev: 1, ame: 2, con: 2, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -240,9 +246,11 @@ module.exports = [
     color: 'blue',
     tradeRate: 3,
     discs: 13,
-    initialS: 6,
-    initialM: 2,
-    initialG: 2,
+    initialResources: [
+      { type: 'S', initialCount: 6, alternativeIncomes: null },
+      { type: 'M', initialCount: 2, alternativeIncomes: null },
+      { type: 'G', initialCount: 2, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['224'],
     emplacements: ['alliance', 'twin', 'twin', 'twin'],
@@ -260,7 +268,7 @@ module.exports = [
     tags: [],
     activeActions: { exp: 1, dev: 2, ame: 2, con: 2, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -319,9 +327,11 @@ module.exports = [
     color: 'black',
     tradeRate: 4,
     discs: 13,
-    initialS: 3,
-    initialM: 4,
-    initialG: 3,
+    initialResources: [
+      { type: 'S', initialCount: 3, alternativeIncomes: null },
+      { type: 'M', initialCount: 4, alternativeIncomes: null },
+      { type: 'G', initialCount: 3, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['232'],
     emplacements: ['twin', 'twin', 'twin', 'twin', 'pv'],
@@ -339,7 +349,7 @@ module.exports = [
     tags: [],
     activeActions: { exp: 1, dev: 1, ame: 2, con: 2, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -398,9 +408,11 @@ module.exports = [
     color: 'white',
     tradeRate: 3,
     discs: 13,
-    initialS: 3,
-    initialM: 4,
-    initialG: 2,
+    initialResources: [
+      { type: 'S', initialCount: 3, alternativeIncomes: null },
+      { type: 'M', initialCount: 4, alternativeIncomes: null },
+      { type: 'G', initialCount: 2, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['230'],
     emplacements: ['twin', 'twin', 'twin', 'twin'],
@@ -418,7 +430,7 @@ module.exports = [
     tags: [],
     activeActions: { exp: 1, dev: 1, ame: 3, con: 3, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',
@@ -477,9 +489,11 @@ module.exports = [
     color: 'yellow',
     tradeRate: 3,
     discs: 13,
-    initialS: 4,
-    initialM: 3,
-    initialG: 2,
+    initialResources: [
+      { type: 'S', initialCount: 4, alternativeIncomes: null },
+      { type: 'M', initialCount: 3, alternativeIncomes: null },
+      { type: 'G', initialCount: 2, alternativeIncomes: null },
+    ],
     colons: 3,
     sectors: ['228'],
     emplacements: ['twin', 'twin', 'twin', 'twin'],
@@ -497,7 +511,7 @@ module.exports = [
     tags: ['chooseTile', 'ancientFriend', 'scoreForAncients'],
     activeActions: { exp: 1, dev: 1, ame: 2, con: 2, dep: 2, inf: 2 },
     passedActions: { ame: 1, con: 1, dep: 1 },
-    schematics: {
+    ships: {
       interceptor: {
         stats: { ini: 1, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'interceptor_std',

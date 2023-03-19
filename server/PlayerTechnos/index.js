@@ -51,6 +51,10 @@ class PlayerTechnos {
     };
   }
 
+  export() {
+    return this.tracks;
+  }
+
   deserialize(data) {
     this.tracks = data.tracks;
   }
