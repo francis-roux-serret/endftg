@@ -11,6 +11,7 @@ export const scope = 'app.components.PlayerHashInput';
 export default defineMessages({
   header: {
     id: `${scope}.header`,
-    defaultMessage: 'Join an existing starting game : input you player hash here',
+    defaultMessage:
+      'Join an existing starting game : input your player hash here',
   },
 });
