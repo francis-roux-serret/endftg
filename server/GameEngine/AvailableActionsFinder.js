@@ -3,7 +3,6 @@ class AvailableActionsFinder {
     this.result = [];
     this.gameData = gameData;
     this.playerId = playerId;
-    this.playerId = playerId;
     this.player = this.gameData.players.find(p => p.id === this.playerId);
     if (!this.player) {
       throw new Error(`Cannot find active player ${this.playerId}`);
