@@ -47,38 +47,38 @@ const TabBox = styled.div`
 
 const playerThemes = {
   blue: {
-    frontColor: 'white',
-    textColor: 'white',
+    frontColor: '#fff',
+    textColor: '#fff',
     backColor: '#37F',
     lineColor: '#37F',
   },
   yellow: {
-    frontColor: 'black',
-    textColor: 'black',
+    frontColor: '#000',
+    textColor: '#000',
     backColor: '#ff4',
     lineColor: '#ff4',
   },
   white: {
-    frontColor: 'black',
-    textColor: 'black',
+    frontColor: '#000',
+    textColor: '#000',
     backColor: '#eee',
     lineColor: '#eee',
   },
   black: {
-    frontColor: 'white',
-    textColor: 'white',
+    frontColor: '#fff',
+    textColor: '#fff',
     backColor: '#333',
     lineColor: '#333',
   },
   red: {
-    frontColor: 'white',
-    textColor: 'white',
+    frontColor: '#fff',
+    textColor: '#fff',
     backColor: '#F64',
     lineColor: '#F64',
   },
   green: {
-    frontColor: 'black',
-    textColor: 'black',
+    frontColor: '#000',
+    textColor: '#000',
     backColor: '#4c4',
     lineColor: '#4c4',
   },
@@ -96,11 +96,12 @@ function ControlBoard({ gameData }) {
 
   const [activePlayer, setActivePlayer] = useState(null);
   const currentPlayer = gameData.players.find(
-    p => p.order === gameData.status.turn,
+    p => p.id === gameData.status.playerOrder[gameData.status.playerIndex],
   );
   const isActiveConnected =
     activePlayer && activePlayer.id === connectedPlayer.id;
-  const isActiveCurrent = activePlayer && activePlayer.id === currentPlayer.id;
+  const isActiveCurrent =
+    (activePlayer && activePlayer.id) === (currentPlayer && currentPlayer.id);
   const activeTheme = activePlayer
     ? playerThemes[activePlayer.color]
     : playerThemes.empty;
@@ -116,6 +117,10 @@ function ControlBoard({ gameData }) {
   useEffect(() => {
     setActivePlayer(connectedPlayer);
   }, [connectedPlayer && connectedPlayer.id]);
+
+  if (!currentPlayer) {
+    return <div>loading</div>;
+  }
 
   return (
     <Wrapper>
@@ -293,10 +298,10 @@ function ControlBoard({ gameData }) {
           </div>
           <div>
             <span>Starbase : </span>
-            {activePlayer.ships.base.parts.map((p, i) => (
+            {activePlayer.ships.starbase.parts.map((p, i) => (
               <span key={`${i + 1}`}>{p.part}</span>
             ))}
-            {Array(activePlayer.ships.base.stats.ini).map((v, ii) => (
+            {Array(activePlayer.ships.starbase.stats.ini).map((v, ii) => (
               <span key={`${ii + 1}`}>^</span>
             ))}
           </div>

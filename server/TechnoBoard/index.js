@@ -8,14 +8,14 @@ class TechnoBoard {
     this.itemSacks = itemSacks;
     const colorTreeTemplate = {
       tiles: [
-        { price: 2, isNew: false, stack: [] },
-        { price: 4, isNew: false, stack: [] },
-        { price: 6, isNew: false, stack: [] },
-        { price: 8, isNew: false, stack: [] },
-        { price: 10, isNew: false, stack: [] },
-        { price: 12, isNew: false, stack: [] },
-        { price: 14, isNew: false, stack: [] },
-        { price: 16, isNew: false, stack: [] },
+        { price: 2, min: 2, isNew: false, stack: [] },
+        { price: 4, min: 3, isNew: false, stack: [] },
+        { price: 6, min: 3, isNew: false, stack: [] },
+        { price: 8, min: 4, isNew: false, stack: [] },
+        { price: 10, min: 5, isNew: false, stack: [] },
+        { price: 12, min: 6, isNew: false, stack: [] },
+        { price: 14, min: 7, isNew: false, stack: [] },
+        { price: 16, min: 8, isNew: false, stack: [] },
       ],
     };
     this.trees = [
@@ -43,6 +43,36 @@ class TechnoBoard {
     }));
   }
 
+  getAffordable(reductions, realAccount, virtualAccount) {
+    const self = this;
+
+    const result = reductions
+      .filter(({ reduction }) => reduction !== null)
+      .map(({ color, reduction }) => {
+        const technos = self.trees
+          .find(t => t.color === color)
+          .tiles.map(t => {
+            const price = Math.min(t.price - reduction, t.min);
+            const available = t.stack.length > 0;
+
+            return {
+              techno: available ? t.stack[0] : null,
+              price,
+              isNew: t.isNew,
+              okReal: available && realAccount >= price,
+              okVirtual: available && virtualAccount >= price,
+            };
+          });
+
+        return {
+          color,
+          technos: technos.filter(t => t.techno !== null),
+        };
+      });
+
+    return result.filter(r => r.technos.length > 0);
+  }
+
   pickNewTechnos(count) {
     this.clearIsNew();
     let deCount = count;
@@ -50,7 +80,12 @@ class TechnoBoard {
       const techno = this.itemSacks.pickOne('techno');
       const tree = this.trees.find(t => t.color === techno.color);
       if (techno.color === BLACK_TECHNO_COLOR) {
-        tree.tiles.push({ price: techno.price, isNew: true, stack: [techno] });
+        tree.tiles.push({
+          price: techno.price,
+          min: techno.min,
+          isNew: true,
+          stack: [techno],
+        });
       } else {
         deCount -= 1;
         const tile = tree.tiles.find(t => t.price === techno.price);

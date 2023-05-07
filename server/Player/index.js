@@ -151,6 +151,14 @@ class Player {
     this.addDiscs(total);
   }
 
+  getObjectSackName(object) {
+    if (['orbital', 'monolith'].includes(object)) {
+      return object;
+    }
+
+    return `${this.color}-${object}`;
+  }
+
   hasTechno(t) {
     return this.playerTechnos.hasTechno(t);
   }
@@ -165,6 +173,32 @@ class Player {
 
   getPopulationTrack(type) {
     return this.populationTracks.find(track => track.getType() === type);
+  }
+
+  getAffordableBuilds(realAccount, virtualAccount) {
+    const { prices } = this.getRaceConfig();
+
+    return Object.keys(prices)
+      .filter(object => virtualAccount >= prices[object])
+      .map(object => ({
+        object,
+        price: prices[object],
+        okReal: realAccount >= prices[object],
+        okVirtual: virtualAccount >= prices[object],
+      }));
+  }
+
+  getBalance(type) {
+    const real = this.getPopulationTrack(type).getCurrentCount();
+    const { tradeRate } = this.getRaceConfig();
+    const maxTrade = this.populationTracks
+      .filter(track => track.getType() !== type)
+      .reduce(
+        (acc, track) => acc + Math.trunc(track.getCurrentCount() / tradeRate),
+        0,
+      );
+
+    return { real, virtual: real + maxTrade };
   }
 
   getColonisablePlanetTypes() {

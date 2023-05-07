@@ -1,13 +1,13 @@
 const randomPick = require('../utilities/randomPick');
 
 class ItemSack {
-  constructor(type, limited, random, isFIFO) {
+  constructor(type, limited, random, isFIFO, index = 0, sack = []) {
     this.type = type;
-    this.sack = [];
     this.limited = limited;
-    this.index = 0;
     this.random = random;
     this.isFIFO = isFIFO;
+    this.index = index;
+    this.sack = sack;
   }
 
   getType() {
@@ -84,12 +84,27 @@ class ItemSacks {
   }
 
   deserialize(data) {
-    this.sacks = data.sacks;
+    this.sacks = data.sacks.map(
+      sackData =>
+        new ItemSack(
+          sackData.type,
+          sackData.limited,
+          sackData.random,
+          sackData.isFIFO,
+          sackData.index,
+          sackData.sack,
+        ),
+    );
   }
 
   /** @private */
   getSack(type) {
-    return this.sacks.find(s => s.getType() === type);
+    const sack = this.sacks.find(s => s.getType() === type);
+    if (!sack) {
+      console.error(`Cannot find sack ${type}`);
+    }
+
+    return sack;
   }
 
   createSack(type, limited, random = false, isFIFO = true) {

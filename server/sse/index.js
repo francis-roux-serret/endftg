@@ -1,5 +1,5 @@
 const express = require('express');
-const sseServer = require('./sseServer');
+const { sseServer } = require('./sseServer');
 
 const router = express.Router();
 

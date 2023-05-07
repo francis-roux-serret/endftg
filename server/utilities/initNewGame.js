@@ -26,7 +26,7 @@ function initSacks(gameData) {
       { type: 'interceptor', nb: 8 },
       { type: 'cruiser', nb: 4 },
       { type: 'dreadnought', nb: 2 },
-      { type: 'base', nb: 4 },
+      { type: 'starbase', nb: 4 },
     ];
     shipTypes.forEach(({ type, nb }) => {
       const sackName = `${p.color}-${type}`;
@@ -149,6 +149,18 @@ function initGame(gameData) {
   gameData.starmap.addTile(0, 0, 0, centerTileTemplate);
   const countBasedConfig = playerCountConfig[gameData.players.length];
 
+  // Game status
+  gameData.status = {
+    round: 0,
+    phase: 'init',
+    turn: 0,
+    playerIndex: 0,
+    passedPlayers: [],
+    remainingRing3: countBasedConfig.nbSector3,
+    playerOrder: gameData.players.map(p => p.id),
+  };
+
+  // Players
   gameData.players.forEach((player, index) => {
     // Pick home
     const tileId = player.pickHomeSectorId();
@@ -187,15 +199,20 @@ function initGame(gameData) {
     });
   });
 
+  // Guardians on remaining tiles
   countBasedConfig.guardians.forEach(({ x, y, rotation }) => {
     const tile = gameData.itemSacks.pickOne('guardianTile');
     gameData.starmap.addTile(x, y, rotation, tile);
   });
 
+  // game config
   gameData.alliances = countBasedConfig.alliances;
   gameData.nbPick = countBasedConfig.nbPick;
   gameData.technoBoard.pickNewTechnos(countBasedConfig.nbTechnos);
   gameData.itemSacks.shrinkSack('ring3', countBasedConfig.nbSector3);
+
+  // Update status
+  // TODO: startRound() and set isStarted when all players are connected
 }
 
 function initNewGame(config) {

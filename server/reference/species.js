@@ -11,7 +11,7 @@ module.exports = [
     colons: 3,
     sectors: ['221', '223', '225', '227', '229', '231'],
     emplacements: ['alliance', 'twin', 'twin', 'twin', 'twin'],
-    technos: ['star_base'],
+    technos: ['starbase'],
     initialShips: ['interceptor'],
     prices: {
       interceptor: 3,
@@ -65,7 +65,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -146,7 +146,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -227,7 +227,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -308,7 +308,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -389,7 +389,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -470,7 +470,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [
@@ -551,7 +551,7 @@ module.exports = [
           { id: 'BR', part: 'thr_1' },
         ],
       },
-      base: {
+      starbase: {
         stats: { ini: 4, pow: 0, cmp: 0, shd: 0, hul: 0, thr: 0 },
         ihm: 'base_std',
         parts: [

@@ -41,6 +41,7 @@ class Store {
 
         self.games.push({
           gameId: serializedGame.gameId,
+          status: serializedGame.status,
           itemSacks,
           starmap,
           technoBoard,
@@ -71,6 +72,7 @@ class Store {
     try {
       const data = this.games.map(game => ({
         gameId: game.gameId,
+        status: game.status,
         itemSacks: game.itemSacks && game.itemSacks.serialize(),
         starmap: game.starmap && game.starmap.serialize(),
         technoBoard: game.technoBoard && game.technoBoard.serialize(),

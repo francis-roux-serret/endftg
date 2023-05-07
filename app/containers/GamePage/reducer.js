@@ -24,8 +24,12 @@ export const initialState = {
     },
     status: {
       round: 0,
-      phase: 'move',
+      phase: 'wait',
       turn: 0,
+      playerIndex: 0,
+      passedPlayers: [],
+      remainingRing3: 8,
+      playerOrder: [],
     },
     starmap: { tiles: [], connections: [] },
     players: [],

@@ -1,3 +1,5 @@
-const factory = gameData => ({ kind: 'gameUpdate', gameData });
+const {
+  SSE_GAME_UPDATE,
+} = require('../../../app/containers/GamePage/sseMessages');
 
-module.exports = factory;
+module.exports = gameData => ({ kind: SSE_GAME_UPDATE, gameData });

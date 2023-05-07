@@ -1,7 +1,5 @@
 const store = require('../store');
 const logger = require('../logger');
-const prepareDataForPlayer = require('../utilities/prepareDataForPlayer');
-const gameUpdateMessage = require('./messages/gameUpdateMessage');
 
 const playerConnections = {};
 
@@ -12,12 +10,18 @@ function sendMessageToOnePlayer(playerId, message) {
 
   const { res } = playerConnections[playerId];
   if (res) {
-    logger.debug(`Sending`, message);
+    logger.debug(
+      `Sending ${JSON.stringify(message.kind)} to player ${playerId}`,
+    );
     res.write(`data: ${JSON.stringify(message)}\n\n`);
   } else {
     playerConnections[playerId].messages.push(message);
   }
 }
+
+module.exports = { sendMessageToOnePlayer };
+
+const GameEngine = require('../GameEngine');
 
 function sseServer(req, res) {
   const { hash } = req.query;
@@ -49,11 +53,10 @@ function sseServer(req, res) {
     sendMessageToOnePlayer(player.id, message);
   });
 
+  const gameEngine = new GameEngine(game, player.id);
+
   // Send game status
-  sendMessageToOnePlayer(
-    player.id,
-    gameUpdateMessage(prepareDataForPlayer(game, player.id)),
-  );
+  gameEngine.connectToPlayerClient();
 
   // If client closes connection, stop sending events and clear res
   res.on('close', () => {
@@ -63,4 +66,4 @@ function sseServer(req, res) {
   });
 }
 
-module.exports = sseServer;
+module.exports = { sseServer, sendMessageToOnePlayer };

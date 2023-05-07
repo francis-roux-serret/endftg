@@ -1,5 +1,5 @@
 const COLORS = ['red', 'green', 'yellow'];
-const DEFAULT_BONUSES = [
+const DEFAULT_PROPS = [
   { reduction: 0, vp: 0 },
   { reduction: 1, vp: 0 },
   { reduction: 2, vp: 0 },
@@ -11,7 +11,7 @@ const DEFAULT_BONUSES = [
 
 class PlayerTechnos {
   constructor(alternateTechnoBonuses = null) {
-    const technoBonuses = alternateTechnoBonuses || DEFAULT_BONUSES;
+    const technoBonuses = alternateTechnoBonuses || DEFAULT_PROPS;
     this.tracks = COLORS.map(color => ({
       color,
       technos: technoBonuses.map(tb => ({
@@ -23,6 +23,37 @@ class PlayerTechnos {
 
   getTrack(color) {
     return this.tracks.find(tr => tr.color === color);
+  }
+
+  getReductions() {
+    return this.tracks.map(track => {
+      const firstFreeSquare = track.technos.find(t => t.techno === null);
+
+      return {
+        color: track.color,
+        reduction: firstFreeSquare ? firstFreeSquare.reduction : null,
+      };
+    });
+  }
+
+  getAvailableShipParts() {
+    const parts = this.tracks.reduce((a, track) => {
+      track.technos
+        .filter(t => t.techno !== null)
+        .forEach(t => a.push(t.techno.id));
+
+      return [...a];
+    }, []);
+
+    return [...parts, 'thr_1', 'pow_3', 'can_1', 'hul_1', 'shd_1'];
+  }
+
+  getVPs() {
+    return this.tracks.reduce((a, track) => {
+      const usedSquares = track.technos.filter(t => t.techno !== null);
+
+      return a + usedSquares.length ? usedSquares.pop().vp : 0;
+    }, 0);
   }
 
   hasTechno(technoName) {

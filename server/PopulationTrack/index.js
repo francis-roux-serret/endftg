@@ -35,8 +35,8 @@ class PopulationTrack {
       type: this.type,
       empty: this.countEmptySpace(),
       available: this.countAvailable(),
-      cemetaryCount: this.cemetaryCount,
       currentCount: this.currentCount,
+      cemetaryCount: this.cemetaryCount,
       populations: this.populations,
     };
   }
@@ -53,6 +53,10 @@ class PopulationTrack {
     this.populations[lastOne.index].present = false;
 
     return lastOne.income;
+  }
+
+  getCurrentCount() {
+    return this.currentCount;
   }
 
   countEmptySpace() {

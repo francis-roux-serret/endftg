@@ -276,6 +276,22 @@ class StarMap {
 
     return tile;
   }
+
+  findExplorablePositions() {
+    return [];
+  }
+
+  findMoveableShips() {
+    return [];
+  }
+
+  findInfluenceableTiles() {
+    return [];
+  }
+
+  findRemoveableTiles() {
+    return [];
+  }
 }
 
 module.exports = StarMap;

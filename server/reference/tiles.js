@@ -24,7 +24,7 @@ module.exports = [
     label: 'Omega Fornacis',
     tags: ['guardian', 'artefact'],
     planets: ['G', 'S', 'M+'],
-    exits: [1, 1, 0, 1, 1, 1],
+    exits: [1, 1, 0, 1, 1, 0],
   },
   {
     id: '272',
@@ -35,7 +35,7 @@ module.exports = [
     label: 'Sigma Hydrae',
     tags: ['guardian', 'artefact'],
     planets: ['G', 'M', 'S+'],
-    exits: [1, 1, 0, 1, 1, 1],
+    exits: [1, 1, 0, 1, 1, 0],
   },
   {
     id: '273',
@@ -46,7 +46,7 @@ module.exports = [
     label: 'Theta Ophiuchi',
     tags: ['guardian', 'artefact'],
     planets: ['G', 'M', 'M+'],
-    exits: [1, 1, 0, 1, 1, 1],
+    exits: [1, 1, 0, 1, 1, 0],
   },
   {
     id: '274',
@@ -57,7 +57,7 @@ module.exports = [
     label: 'Alpha Lyncis',
     tags: ['guardian', 'artefact'],
     planets: ['G', 'S', 'S+'],
-    exits: [1, 1, 0, 1, 1, 1],
+    exits: [1, 1, 0, 1, 1, 0],
   },
 
   // SECTOR I

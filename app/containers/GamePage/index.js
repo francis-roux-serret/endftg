@@ -14,6 +14,7 @@ import MapBox from '../../components/MapBox';
 import useSSE from '../../utils/useSSE';
 import { setStatusMessage, storeGameUpdate } from './actions';
 import ControlBoard from '../../components/ControlBoard';
+import { SSE_AVAILABLE_ACTIONS, SSE_GAME_UPDATE } from './sseMessages';
 
 export function GamePage(props) {
   useInjectReducer({ key: 'gamePage', reducer });
@@ -22,9 +23,14 @@ export function GamePage(props) {
   const hash = queryParams.get('hash');
 
   const handleSSE = message => {
+    console.log(`received ${message.kind}`);
     switch (message.kind) {
-      case 'gameUpdate': {
+      case SSE_GAME_UPDATE: {
         props.storeGameUpdate(message.gameData);
+        break;
+      }
+      case SSE_AVAILABLE_ACTIONS: {
+        console.log(message.availableActions);
         break;
       }
       default:
@@ -32,12 +38,7 @@ export function GamePage(props) {
     }
   };
 
-  useSSE(
-    hash,
-    message => handleSSE(message),
-    () =>
-      props.setStatusMessage('Connection lost to the game, try to refresh.'),
-  );
+  useSSE(hash, handleSSE);
 
   const { tiles } = props.gameData.starmap;
   const playerColors = props.gameData.players.reduce(
@@ -63,7 +64,6 @@ export function GamePage(props) {
 GamePage.propTypes = {
   statusMessage: PropTypes.string,
   gameData: PropTypes.object.isRequired,
-  setStatusMessage: PropTypes.func.isRequired,
   storeGameUpdate: PropTypes.func.isRequired,
 };
 
